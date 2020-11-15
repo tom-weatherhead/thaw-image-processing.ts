@@ -1,6 +1,6 @@
 {
 	"name": "thaw-image-processing.ts",
-	"version": "0.0.0",
+	"version": "0.0.1",
 	"description": "Raster image processing functions written in TypeScript",
 	"keywords": [
 		"bicubic",

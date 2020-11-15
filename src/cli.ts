@@ -249,59 +249,65 @@ function dispatchMirror(argv: string[]): void {
 // 	engine.pixelateImageFromJpegFile(srcFilePath, dstFilePath, pixelWidth, pixelHeight, dstQuality);
 // }
 
-// function dispatchResample (argv) {
-// 	let srcFilePath = defaultSrcFilePath;
-// 	let dstFilePath = 'test/output-files/resample.jpg';
-// 	let dstWidth = 0;
-// 	let dstHeight = 0;
-// 	let dstQuality;
-// 	let defaultDstWidth = 640;
-// 	let defaultDstHeight = 480;
-// 	let mode = engine.modeBicubic;
+function dispatchResample(argv: string[]): void {
+	let srcFilePath = defaultSrcFilePath;
+	let dstFilePath = 'test/output-files/resample.jpg';
+	let dstWidth = 0;
+	let dstHeight = 0;
+	let dstQuality = 90;
+	const defaultDstWidth = 640;
+	const defaultDstHeight = 480;
+	let mode = engine.modeBicubic;
 
-// 	for (let i = 0; i < argv.length; i++) {
-// 		const arg = argv[i];
-// 		//const thereIsANextArg = i < argv.length - 1;
+	for (let i = 0; i < argv.length; i++) {
+		const arg = argv[i];
+		//const thereIsANextArg = i < argv.length - 1;
 
-// 		if (arg.substr(0, 1) !== '-') {
+		if (arg.substr(0, 1) !== '-') {
+			if (!srcFilePath) {
+				srcFilePath = arg;
+			} else if (!dstFilePath) {
+				dstFilePath = arg;
+			}
+		} else if (arg === '-sn') {
+			mode = engine.modeNearestNeighbour;
+		} else if (arg === '-sl') {
+			mode = engine.modeBilinear;
+		} else if (arg === '-sc') {
+			mode = engine.modeBicubic;
+		} else if (i < argv.length - 1) {
+			const nextArg = argv[i + 1];
+			i++;
 
-// 			if (!srcFilePath) {
-// 				srcFilePath = arg;
-// 			} else if (!dstFilePath) {
-// 				dstFilePath = arg;
-// 			}
-// 		} else if (arg === '-sn') {
-// 			mode = engine.modeNearestNeighbour;
-// 		} else if (arg === '-sl') {
-// 			mode = engine.modeBilinear;
-// 		} else if (arg === '-sc') {
-// 			mode = engine.modeBicubic;
-// 		} else if (i < argv.length - 1) {
-// 			const nextArg = argv[i + 1];
-// 			i++;
+			if (arg === '-w') {
+				dstWidth = parseInt(nextArg);
+			} else if (arg === '-h') {
+				dstHeight = parseInt(nextArg);
+			} else if (arg === '-q') {
+				dstQuality = parseInt(nextArg);
+			}
+		}
+	}
 
-// 			if (arg === '-w') {
-// 				dstWidth = parseInt(nextArg);
-// 			} else if (arg === '-h') {
-// 				dstHeight = parseInt(nextArg);
-// 			} else if (arg === '-q') {
-// 				dstQuality = parseInt(nextArg);
-// 			}
-// 		}
-// 	}
+	if (dstWidth !== dstWidth || dstWidth <= 0) {
+		dstWidth = defaultDstWidth;
+	}
 
-// 	if (dstWidth !== dstWidth || dstWidth <= 0) {
-// 		dstWidth = defaultDstWidth;
-// 	}
+	if (dstHeight !== dstHeight || dstHeight <= 0) {
+		dstHeight = defaultDstHeight;
+	}
 
-// 	if (dstHeight !== dstHeight || dstHeight <= 0) {
-// 		dstHeight = defaultDstHeight;
-// 	}
-
-// 	console.log('Resample.');
-// 	//console.log(`engine.resampleImageFromJpegFile(${srcFilePath}, ${dstFilePath}, ${dstWidth}, ${dstHeight}, ${mode}, ${dstQuality});`);
-// 	engine.resampleImageFromJpegFile(srcFilePath, dstFilePath, dstWidth, dstHeight, mode, dstQuality);
-// }
+	console.log('Resample.');
+	//console.log(`engine.resampleImageFromJpegFile(${srcFilePath}, ${dstFilePath}, ${dstWidth}, ${dstHeight}, ${mode}, ${dstQuality});`);
+	engine.resampleImageFromJpegFile(
+		srcFilePath,
+		dstFilePath,
+		dstWidth,
+		dstHeight,
+		mode,
+		dstQuality
+	);
+}
 
 // function dispatchRotate90DegreesClockwise (argv) {
 // 	let srcFilePath = defaultSrcFilePath;
@@ -418,9 +424,9 @@ function dispatch(argv: string[]): void {
 		// 			dispatchPixelate(argv);
 		// 			break;
 
-		// 		case 'rs':
-		// 			dispatchResample(argv);
-		// 			break;
+		case 'rs':
+			dispatchResample(argv);
+			break;
 
 		// 		case 'r90ccw':
 		// 			dispatchRotate90DegreesCounterclockwise(argv);
