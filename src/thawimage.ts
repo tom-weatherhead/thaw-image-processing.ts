@@ -9,12 +9,26 @@ function getBytesPerLine(width: number, bytesPerPixel: number): number {
 	// return Math.ceil(width * bytesPerPixel / byteAlignmentOfLines) * byteAlignmentOfLines;
 }
 
+// From https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8ClampedArray :
+
+// The Uint8ClampedArray typed array represents an array of 8-bit unsigned integers clamped to 0-255; if you specified a value that is out of the range of [0,255], 0 or 255 will be set instead; if you specify a non-integer, the nearest integer will be set. The contents are initialized to 0. Once established, you can reference elements in the array using the object's methods, or using standard array index syntax (that is, using bracket notation).
+
+// export type ThAWImageBufferType = Buffer;
+export type ThAWImageBufferType = Uint8ClampedArray;
+
+export function createImageBuffer(size: number): ThAWImageBufferType {
+	// return Buffer.alloc(size);
+
+	// // return Uint8ClampedArray.from(Buffer.alloc(size));
+	return new Uint8ClampedArray(size);
+}
+
 export interface IThAWImage {
-	width: number;
-	height: number;
-	bytesPerPixel: number;
-	bytesPerLine: number;
-	data: Buffer;
+	readonly width: number;
+	readonly height: number;
+	readonly bytesPerPixel: number;
+	readonly bytesPerLine: number;
+	readonly data: ThAWImageBufferType;
 	// colourModel: ???;
 
 	getPixelAsArray(row: number, column: number): number[];
@@ -29,19 +43,20 @@ export interface IThAWImage {
 }
 
 class ThAWImage implements IThAWImage {
-	public width: number;
-	public height: number;
-	public bytesPerPixel: number;
-	public bytesPerLine: number;
-	public data: Buffer;
+	public readonly width: number;
+	public readonly height: number;
+	public readonly bytesPerPixel: number;
+	public readonly bytesPerLine: number;
+	public readonly data: ThAWImageBufferType;
 
 	// TODO: How to make some parameters optional in TypeScript?
+	// -> data?: ThAWImageBufferType
 	constructor(
 		width: number,
 		height: number,
-		bytesPerPixel: number,
-		bytesPerLine: number,
-		data: Buffer | null
+		bytesPerPixel?: number,
+		bytesPerLine?: number,
+		data?: ThAWImageBufferType
 	) {
 		this.width = width;
 		this.height = height;
@@ -52,8 +67,8 @@ class ThAWImage implements IThAWImage {
 			? bytesPerLine
 			: getBytesPerLine(this.width, this.bytesPerPixel);
 		this.data = data
-			? (data as Buffer)
-			: Buffer.alloc(this.bytesPerLine * this.height); // Buffer.unsafealloc() ?
+			? (data as ThAWImageBufferType)
+			: createImageBuffer(this.bytesPerLine * this.height); // Buffer.unsafealloc() ?
 		// console.log('this.width is', this.width);
 		// console.log('this.height is', this.height);
 		// console.log('this.bytesPerPixel is', this.bytesPerPixel);
@@ -150,7 +165,7 @@ export function CreateThAWImage(
 	height: number,
 	bytesPerPixel?: number,
 	bytesPerLine?: number,
-	data?: Buffer | null
+	data?: ThAWImageBufferType
 ): IThAWImage {
 	if (typeof bytesPerPixel === 'undefined' || bytesPerPixel <= 0) {
 		bytesPerPixel = defaultBytesPerPixel;
@@ -160,9 +175,9 @@ export function CreateThAWImage(
 		bytesPerLine = width * bytesPerPixel;
 	}
 
-	if (typeof data === 'undefined') {
-		data = null;
-	}
+	// if (typeof data === 'undefined') {
+	// 	data = null;
+	// }
 
 	return new ThAWImage(width, height, bytesPerPixel, bytesPerLine, data);
 }

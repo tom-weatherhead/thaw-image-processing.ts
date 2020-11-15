@@ -46,18 +46,23 @@
 
 'use strict';
 
-import { CreateThAWImage, IThAWImage } from './thawimage';
+import {
+	createImageBuffer,
+	CreateThAWImage,
+	IThAWImage,
+	ThAWImageBufferType
+} from './thawimage';
 
 export const modeNearestNeighbour = 0;
 export const modeBilinear = 1;
 export const modeBicubic = 2;
 
 function resample1DNearestNeighbour(
-	dstBuffer: Buffer,
+	dstBuffer: ThAWImageBufferType,
 	dstInitialOffset: number,
 	numDstPixels: number,
 	dstPixelStride: number,
-	srcBuffer: Buffer,
+	srcBuffer: ThAWImageBufferType,
 	srcInitialOffset: number,
 	numSrcPixels: number,
 	srcPixelStride: number,
@@ -96,11 +101,11 @@ function resample1DNearestNeighbour(
 }
 
 function resample1DBilinear(
-	dstBuffer: Buffer,
+	dstBuffer: ThAWImageBufferType,
 	dstInitialOffset: number,
 	numDstPixels: number,
 	dstPixelStride: number,
-	srcBuffer: Buffer,
+	srcBuffer: ThAWImageBufferType,
 	srcInitialOffset: number,
 	numSrcPixels: number,
 	srcPixelStride: number,
@@ -209,11 +214,11 @@ function generateCubicWeightFunction(
 const getBicubicWeight = generateCubicWeightFunction(0, 0.5); // Catmull-Rom
 
 function resample1DBicubic(
-	dstBuffer: Buffer,
+	dstBuffer: ThAWImageBufferType,
 	dstInitialOffset: number,
 	numDstPixels: number,
 	dstPixelStride: number,
-	srcBuffer: Buffer,
+	srcBuffer: ThAWImageBufferType,
 	srcInitialOffset: number,
 	numSrcPixels: number,
 	srcPixelStride: number,
@@ -319,11 +324,11 @@ function get1DResamplingFunction(
 	mode: number
 ):
 	| ((
-			dstBuffer: Buffer,
+			dstBuffer: ThAWImageBufferType,
 			dstInitialOffset: number,
 			numDstPixels: number,
 			dstPixelStride: number,
-			srcBuffer: Buffer,
+			srcBuffer: ThAWImageBufferType,
 			srcInitialOffset: number,
 			numSrcPixels: number,
 			srcPixelStride: number,
@@ -381,12 +386,12 @@ export function resampleImageFromBuffer(
 	const intermediateWidth = dstWidth;
 	const intermediateHeight = srcHeight;
 	const intermediateBytesPerLine = dstWidth * numBytesPerPixel;
-	const intermediateBuffer = Buffer.alloc(
+	const intermediateBuffer = createImageBuffer(
 		intermediateHeight * intermediateBytesPerLine
 	);
 
 	const dstBytesPerLine = intermediateBytesPerLine;
-	const dstBuffer = Buffer.alloc(dstHeight * dstBytesPerLine);
+	const dstBuffer = createImageBuffer(dstHeight * dstBytesPerLine);
 
 	// 1) Resample horizontally from srcBuffer to intermediateBuffer
 

@@ -4,7 +4,11 @@
 
 'use strict';
 
-import { CreateThAWImage, IThAWImage } from './thawimage';
+import {
+	CreateThAWImage,
+	IThAWImage,
+	ThAWImageBufferType
+} from './thawimage';
 
 // typedef CreateImage(width: number, height: number, bytesPerPixel: number, bytesPerLine: number, data: Buffer): IThAWImage;
 
@@ -18,7 +22,7 @@ export function generateTestImage_SingleRGBAColour(
 	alpha: number
 ): IThAWImage {
 	// const image = fnCreateImage(width, height, 4);
-	const image = CreateThAWImage(width, height, 4, 0, null);
+	const image = CreateThAWImage(width, height, 4);
 	const buffer = image.data;
 	let rowOffset = 0;
 
@@ -70,7 +74,7 @@ export function generateTestImage_GreyscaleGradient(
 	height: number
 ): IThAWImage {
 	// const image = fnCreateImage(width, height, 1);
-	const image = CreateThAWImage(width, height, 1, 0, null);
+	const image = CreateThAWImage(width, height, 1);
 	const buffer = image.data;
 	let rowOffset = 0;
 
@@ -88,17 +92,17 @@ export function generateTestImage_GreyscaleGradient(
 }
 
 export function compositeImageFromBuffers(
-	dstBuffer: Buffer,
+	dstBuffer: ThAWImageBufferType,
 	dstWidth: number,
 	dstHeight: number,
 	dstInitialRowOffset: number,
 	dstRowStride: number,
 	dstPixelStride: number,
-	srcBuffer: Buffer,
+	srcBuffer: ThAWImageBufferType,
 	srcInitialRowOffset: number,
 	srcRowStride: number,
 	srcPixelStride: number,
-	alphaBuffer: Buffer,
+	alphaBuffer: ThAWImageBufferType,
 	alphaInitialRowOffset: number,
 	alphaRowStride: number,
 	alphaPixelStride: number,

@@ -3,14 +3,20 @@
 'use strict';
 
 // import * from './thawimage';
-import { IThAWImage } from './thawimage';
+import { IThAWImage, ThAWImageBufferType } from './thawimage';
 
-export function seeingRedRGBA(buffer: Buffer, offset: number): void {
+export function seeingRedRGBA(
+	buffer: ThAWImageBufferType,
+	offset: number
+): void {
 	buffer[offset + 2] = 0;
 	buffer[offset + 1] = 0;
 }
 
-export function desaturateRGBA(buffer: Buffer, offset: number): void {
+export function desaturateRGBA(
+	buffer: ThAWImageBufferType,
+	offset: number
+): void {
 	// Assuming that buffer[offset] is the red byte, buffer[offset + 1] is the green byte, and buffer[offset + 2] is the blue byte.
 	const grey = Math.round(
 		buffer[offset] * 0.3 +
@@ -25,7 +31,7 @@ export function desaturateRGBA(buffer: Buffer, offset: number): void {
 
 export function mapColoursInImageFromBuffer(
 	srcImage: IThAWImage,
-	fnMapColours: (buffer: Buffer, offset: number) => void
+	fnMapColours: (buffer: ThAWImageBufferType, offset: number) => void
 ): IThAWImage {
 	const bytesPerPixel = 4; // Assume that the pixel format is RGBA.
 

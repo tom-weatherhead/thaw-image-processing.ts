@@ -42,7 +42,7 @@ function loadJpegFile(fsInjected: typeof fs, path: string): IThAWImage {
 		srcImage.height,
 		0,
 		0,
-		srcImage.data
+		Uint8ClampedArray.from(srcImage.data)
 	);
 }
 

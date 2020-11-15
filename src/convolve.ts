@@ -6,14 +6,18 @@
 
 // const gaussianBlurEngine = require('./gaussian-blur.js');
 import { generateKernel } from './gaussian-blur';
-import { CreateThAWImage, IThAWImage } from './thawimage';
+import {
+	CreateThAWImage,
+	IThAWImage,
+	ThAWImageBufferType
+} from './thawimage';
 
 function convolve1D(
-	dstBuffer: Buffer,
+	dstBuffer: ThAWImageBufferType,
 	dstInitialOffset: number,
 	numDstPixels: number,
 	dstPixelStride: number,
-	srcBuffer: Buffer,
+	srcBuffer: ThAWImageBufferType,
 	srcInitialOffset: number,
 	numSrcPixels: number,
 	srcPixelStride: number,

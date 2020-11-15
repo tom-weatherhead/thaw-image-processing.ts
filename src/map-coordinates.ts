@@ -4,14 +4,16 @@
 
 'use strict';
 
+import { ThAWImageBufferType } from './thawimage';
+
 export type MapCoordinatesFunction = (
-	dstBuffer: Buffer,
+	dstBuffer: ThAWImageBufferType,
 	dstWidth: number,
 	dstHeight: number,
 	dstInitialRowOffset: number,
 	dstRowStride: number,
 	dstPixelStride: number,
-	srcBuffer: Buffer,
+	srcBuffer: ThAWImageBufferType,
 	srcInitialRowOffset: number,
 	srcRowStride: number,
 	srcPixelStride: number,
@@ -19,13 +21,13 @@ export type MapCoordinatesFunction = (
 ) => void;
 
 export function mapImageByCoordinatesFromBuffer(
-	dstBuffer: Buffer,
+	dstBuffer: ThAWImageBufferType,
 	dstWidth: number,
 	dstHeight: number,
 	dstInitialRowOffset: number,
 	dstRowStride: number,
 	dstPixelStride: number,
-	srcBuffer: Buffer,
+	srcBuffer: ThAWImageBufferType,
 	srcInitialRowOffset: number,
 	srcRowStride: number,
 	srcPixelStride: number,
