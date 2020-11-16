@@ -5,6 +5,11 @@
 // import * from './thawimage';
 import { IThAWImage, ThAWImageBufferType } from './thawimage';
 
+export type ColourMapperType = (
+	buffer: ThAWImageBufferType,
+	offset: number
+) => void;
+
 export function seeingRedRGBA(
 	buffer: ThAWImageBufferType,
 	offset: number
@@ -31,7 +36,7 @@ export function desaturateRGBA(
 
 export function mapColoursInImageFromBuffer(
 	srcImage: IThAWImage,
-	fnMapColours: (buffer: ThAWImageBufferType, offset: number) => void
+	fnMapColours: ColourMapperType
 ): IThAWImage {
 	const bytesPerPixel = 4; // Assume that the pixel format is RGBA.
 

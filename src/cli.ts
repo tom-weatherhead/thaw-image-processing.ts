@@ -66,200 +66,200 @@ const defaultSrcFilePath = 'test/input-files/fast-and-fourier.jpg';
 // };
 // */
 
-// function dispatchCompositeTest (argv) {
-// 	let srcFilePath = defaultSrcFilePath;
-// 	// let srcFilePath = '../' + defaultSrcFilePath;
-// 	// let srcFilePath = __dirname + '/../' + defaultSrcFilePath;
-// 	// let srcFilePath = path.normalize(path.join(__dirname, '..', defaultSrcFilePath));
+function dispatchCompositeTest(argv: string[]): void {
+	let srcFilePath = defaultSrcFilePath;
+	// let srcFilePath = '../' + defaultSrcFilePath;
+	// let srcFilePath = __dirname + '/../' + defaultSrcFilePath;
+	// let srcFilePath = path.normalize(path.join(__dirname, '..', defaultSrcFilePath));
 
-// 	let dstFilePath = 'test/output-files/composite-test.jpg';
+	let dstFilePath = 'test/output-files/composite-test.jpg';
 
-// 	if (!fs.existsSync(srcFilePath)) {
-// 		console.log(`There is no file at the path ${srcFilePath}`);
-// 		// console.log(`__dirname is ${__dirname}`);
+	if (!fs.existsSync(srcFilePath)) {
+		console.log(`There is no file at the path ${srcFilePath}`);
+		// console.log(`__dirname is ${__dirname}`);
 
-// 		return;
-// 	}
+		return;
+	}
 
-// 	for (let i = 0; i < argv.length; i++) {
-// 		const arg = argv[i];
+	for (let i = 0; i < argv.length; i++) {
+		const arg = argv[i];
 
-// 		if (arg.substr(0, 1) !== '-') {
+		if (arg.substr(0, 1) !== '-') {
+			if (!srcFilePath) {
+				srcFilePath = arg;
+			} else if (!dstFilePath) {
+				dstFilePath = arg;
+			}
+		}
+	}
 
-// 			if (!srcFilePath) {
-// 				srcFilePath = arg;
-// 			} else if (!dstFilePath) {
-// 				dstFilePath = arg;
-// 			}
-// 		}
-// 	}
+	console.log('Composite.');
+	engine.compositeTestFromJpegFile(
+		jpegFileManager,
+		srcFilePath,
+		dstFilePath
+	);
+}
 
-// 	console.log('Composite.');
-// 	engine.compositeTestFromJpegFile(srcFilePath, dstFilePath);
-// }
+function dispatchDesaturate(argv: string[]): void {
+	let srcFilePath = defaultSrcFilePath;
+	let dstFilePath = 'test/output-files/desaturate.jpg';
 
-// function dispatchDesaturate (argv) {
-// 	let srcFilePath = defaultSrcFilePath;
-// 	let dstFilePath = 'test/output-files/desaturate.jpg';
+	for (let i = 0; i < argv.length; i++) {
+		const arg = argv[i];
 
-// 	for (let i = 0; i < argv.length; i++) {
-// 		const arg = argv[i];
+		if (arg.substr(0, 1) !== '-') {
+			if (!srcFilePath) {
+				srcFilePath = arg;
+			} else if (!dstFilePath) {
+				dstFilePath = arg;
+			}
+		}
+	}
 
-// 		if (arg.substr(0, 1) !== '-') {
+	console.log('Desaturate.');
+	engine.mapColoursInImageFromJpegFile(
+		jpegFileManager,
+		srcFilePath,
+		dstFilePath,
+		engine.desaturateRGBA
+	);
+}
 
-// 			if (!srcFilePath) {
-// 				srcFilePath = arg;
-// 			} else if (!dstFilePath) {
-// 				dstFilePath = arg;
-// 			}
-// 		}
-// 	}
+function dispatchFlip(argv: string[]): void {
+	const srcFilePath = defaultSrcFilePath;
+	const dstFilePath = 'test/output-files/flip.jpg';
 
-// 	console.log('Desaturate.');
-// 	engine.mapColoursInImageFromJpegFile(srcFilePath, dstFilePath, engine.desaturateRGBA);
-// }
+	// for (let i = 0; i < argv.length; i++) {
+	// 	const arg = argv[i];
 
-// function dispatchFlip(argv: string[]): void {
-// 	const srcFilePath = defaultSrcFilePath;
-// 	const dstFilePath = 'test/output-files/flip.jpg';
+	// 	if (arg.substr(0, 1) !== '-') {
+	// 		if (!srcFilePath) {
+	// 			srcFilePath = arg;
+	// 		} else if (!dstFilePath) {
+	// 			dstFilePath = arg;
+	// 		}
+	// 	}
+	// }
 
-// 	// for (let i = 0; i < argv.length; i++) {
-// 	// 	const arg = argv[i];
+	console.log('Flip:', argv);
+	engine.flipImageFromJpegFile(jpegFileManager, srcFilePath, dstFilePath);
+}
 
-// 	// 	if (arg.substr(0, 1) !== '-') {
-// 	// 		if (!srcFilePath) {
-// 	// 			srcFilePath = arg;
-// 	// 		} else if (!dstFilePath) {
-// 	// 			dstFilePath = arg;
-// 	// 		}
-// 	// 	}
-// 	// }
+function dispatchGaussianBlur(argv: string[]): void {
+	let srcFilePath = defaultSrcFilePath;
+	let dstFilePath = 'test/output-files/gaussian-blur.jpg';
+	// let sigma = 1.0;
+	let sigma = 4.0;
+	// let kernelSize = 5; // kernelSize must be an odd positive integer smaller than 999.
+	let kernelSize = 21;
+	let dstQuality = engine.defaultJpegQuality;
 
-// 	console.log('Flip:', argv);
-// 	engine.flipImageFromJpegFile(srcFilePath, dstFilePath);
-// }
+	for (let i = 0; i < argv.length; i++) {
+		const arg = argv[i];
+		//const thereIsANextArg = i < argv.length - 1;
 
-// function dispatchGaussianBlur (argv) {
-// 	let srcFilePath = defaultSrcFilePath;
-// 	let dstFilePath = 'test/output-files/gaussian-blur.jpg';
-// 	let sigma = 1.0;
-// 	let kernelSize = 5;
-// 	let dstQuality;
+		if (arg.substr(0, 1) !== '-') {
+			if (!srcFilePath) {
+				srcFilePath = arg;
+			} else if (!dstFilePath) {
+				dstFilePath = arg;
+			}
+		} else if (i < argv.length - 1) {
+			const nextArg = argv[i + 1];
+			i++;
 
-// 	for (let i = 0; i < argv.length; i++) {
-// 		const arg = argv[i];
-// 		//const thereIsANextArg = i < argv.length - 1;
+			if (arg === '-s') {
+				sigma = parseFloat(nextArg);
+			} else if (arg === '-ks') {
+				kernelSize = parseInt(nextArg);
+			} else if (arg === '-q') {
+				dstQuality = parseInt(nextArg);
+				jpegFileManager.setDstImageQuality(dstQuality);
+			}
+		}
+	}
 
-// 		if (arg.substr(0, 1) !== '-') {
+	console.log('Gaussian blur.');
+	//console.log(`engine.convolveImageFromJpegFile(${srcFilePath}, ${dstFilePath}, ${sigma}, ${kernelSize}, ${dstQuality});`);
+	engine.convolveImageFromJpegFile(
+		jpegFileManager,
+		srcFilePath,
+		dstFilePath,
+		sigma,
+		kernelSize
+	);
+}
 
-// 			if (!srcFilePath) {
-// 				srcFilePath = arg;
-// 			} else if (!dstFilePath) {
-// 				dstFilePath = arg;
-// 			}
-// 		} else if (i < argv.length - 1) {
-// 			const nextArg = argv[i + 1];
-// 			i++;
+function dispatchMirror(argv: string[]): void {
+	const srcFilePath = defaultSrcFilePath;
+	const dstFilePath = 'test/output-files/mirror.jpg';
 
-// 			if (arg === '-s') {
-// 				sigma = parseFloat(nextArg);
-// 			} else if (arg === '-ks') {
-// 				kernelSize = parseInt(nextArg);
-// 			} else if (arg === '-q') {
-// 				dstQuality = parseInt(nextArg);
-// 			}
-// 		}
-// 	}
+	// for (let i = 0; i < argv.length; i++) {
+	// 	const arg = argv[i];
 
-// 	console.log('Gaussian blur.');
-// 	//console.log(`engine.convolveImageFromJpegFile(${srcFilePath}, ${dstFilePath}, ${sigma}, ${kernelSize}, ${dstQuality});`);
-// 	engine.convolveImageFromJpegFile(srcFilePath, dstFilePath, sigma, kernelSize, dstQuality);
-// }
+	// 	if (arg.substr(0, 1) !== '-') {
+	// 		if (!srcFilePath) {
+	// 			srcFilePath = arg;
+	// 		} else if (!dstFilePath) {
+	// 			dstFilePath = arg;
+	// 		}
+	// 	}
+	// }
 
-// function dispatchMirror (argv) {
-// 	let srcFilePath = defaultSrcFilePath;
-// 	let dstFilePath = 'test/output-files/mirror.jpg';
+	console.log('Mirror:', argv);
+	engine.mirrorImageFromJpegFile(jpegFileManager, srcFilePath, dstFilePath);
+}
 
-// 	for (let i = 0; i < argv.length; i++) {
-// 		const arg = argv[i];
+function dispatchPixelate(argv: string[]): void {
+	let srcFilePath = defaultSrcFilePath;
+	let dstFilePath = 'test/output-files/pixelate.jpg';
+	let pixelWidth = 8;
+	let pixelHeight = 8;
+	let dstQuality = engine.defaultJpegQuality;
 
-// 		if (arg.substr(0, 1) !== '-') {
+	for (let i = 0; i < argv.length; i++) {
+		const arg = argv[i];
+		//const thereIsANextArg = i < argv.length - 1;
 
-// 			if (!srcFilePath) {
-// 				srcFilePath = arg;
-// 			} else if (!dstFilePath) {
-// 				dstFilePath = arg;
-// 			}
-// 		}
-// 	}
+		if (arg.substr(0, 1) !== '-') {
+			if (!srcFilePath) {
+				srcFilePath = arg;
+			} else if (!dstFilePath) {
+				dstFilePath = arg;
+			}
+		} else if (i < argv.length - 1) {
+			const nextArg = argv[i + 1];
+			i++;
 
-// 	console.log('Mirror.');
-// 	engine.mirrorImageFromJpegFile(srcFilePath, dstFilePath);
-// }
+			if (arg === '-w') {
+				pixelWidth = parseInt(nextArg);
+			} else if (arg === '-h') {
+				pixelHeight = parseInt(nextArg);
+			} else if (arg === '-q') {
+				dstQuality = parseInt(nextArg);
+				jpegFileManager.setDstImageQuality(dstQuality);
+			}
+		}
+	}
 
-// function dispatchMirror(argv: string[]): void {
-// 	const srcFilePath = defaultSrcFilePath;
-// 	const dstFilePath = 'test/output-files/mirror.jpg';
-
-// 	// for (let i = 0; i < argv.length; i++) {
-// 	// 	const arg = argv[i];
-
-// 	// 	if (arg.substr(0, 1) !== '-') {
-// 	// 		if (!srcFilePath) {
-// 	// 			srcFilePath = arg;
-// 	// 		} else if (!dstFilePath) {
-// 	// 			dstFilePath = arg;
-// 	// 		}
-// 	// 	}
-// 	// }
-
-// 	console.log('Mirror:', argv);
-// 	engine.mirrorImageFromJpegFile(srcFilePath, dstFilePath);
-// }
-
-// function dispatchPixelate (argv) {
-// 	let srcFilePath = defaultSrcFilePath;
-// 	let dstFilePath = 'test/output-files/pixelate.jpg';
-// 	let pixelWidth = 8;
-// 	let pixelHeight = 8;
-// 	let dstQuality;
-
-// 	for (let i = 0; i < argv.length; i++) {
-// 		const arg = argv[i];
-// 		//const thereIsANextArg = i < argv.length - 1;
-
-// 		if (arg.substr(0, 1) !== '-') {
-
-// 			if (!srcFilePath) {
-// 				srcFilePath = arg;
-// 			} else if (!dstFilePath) {
-// 				dstFilePath = arg;
-// 			}
-// 		} else if (i < argv.length - 1) {
-// 			const nextArg = argv[i + 1];
-// 			i++;
-
-// 			if (arg === '-w') {
-// 				pixelWidth = parseInt(nextArg);
-// 			} else if (arg === '-h') {
-// 				pixelHeight = parseInt(nextArg);
-// 			} else if (arg === '-q') {
-// 				dstQuality = parseInt(nextArg);
-// 			}
-// 		}
-// 	}
-
-// 	console.log('Pixelate.');
-// 	//console.log(`engine.resampleImageFromJpegFile(${srcFilePath}, ${dstFilePath}, ${dstWidth}, ${dstHeight}, ${mode}, ${dstQuality});`);
-// 	engine.pixelateImageFromJpegFile(srcFilePath, dstFilePath, pixelWidth, pixelHeight, dstQuality);
-// }
+	console.log('Pixelate.');
+	//console.log(`engine.resampleImageFromJpegFile(${srcFilePath}, ${dstFilePath}, ${dstWidth}, ${dstHeight}, ${mode}, ${dstQuality});`);
+	engine.pixelateImageFromJpegFile(
+		jpegFileManager,
+		srcFilePath,
+		dstFilePath,
+		pixelWidth,
+		pixelHeight
+	);
+}
 
 function dispatchResample(argv: string[]): void {
 	let srcFilePath = defaultSrcFilePath;
 	let dstFilePath = 'test/output-files/resample.jpg';
 	let dstWidth = 0;
 	let dstHeight = 0;
-	let dstQuality = 90;
+	let dstQuality = engine.defaultJpegQuality;
 	const defaultDstWidth = 640;
 	const defaultDstHeight = 480;
 	let mode = engine.modeBicubic;
@@ -319,7 +319,7 @@ function dispatchResample(argv: string[]): void {
 // function dispatchRotate90DegreesClockwise (argv) {
 // 	let srcFilePath = defaultSrcFilePath;
 // 	let dstFilePath = 'test/output-files/rotate90cw.jpg';
-// 	let dstQuality;
+// 	let dstQuality = engine.defaultJpegQuality;
 
 // 	for (let i = 0; i < argv.length; i++) {
 // 		const arg = argv[i];
@@ -348,7 +348,7 @@ function dispatchResample(argv: string[]): void {
 // function dispatchRotate90DegreesCounterclockwise (argv) {
 // 	let srcFilePath = defaultSrcFilePath;
 // 	let dstFilePath = 'test/output-files/rotate90ccw.jpg';
-// 	let dstQuality;
+// 	let dstQuality = engine.defaultJpegQuality;
 
 // 	for (let i = 0; i < argv.length; i++) {
 // 		const arg = argv[i];
@@ -377,7 +377,7 @@ function dispatchResample(argv: string[]): void {
 // function dispatchRotate180Degrees (argv) {
 // 	let srcFilePath = defaultSrcFilePath;
 // 	let dstFilePath = 'test/output-files/rotate180.jpg';
-// 	let dstQuality;
+// 	let dstQuality = engine.defaultJpegQuality;
 
 // 	for (let i = 0; i < argv.length; i++) {
 // 		const arg = argv[i];
@@ -407,29 +407,29 @@ function dispatch(argv: string[]): void {
 	const command = argv.shift();
 
 	switch (command) {
-		// 		case 'c':
-		// 			dispatchCompositeTest(argv);
-		// 			break;
+		case 'c':
+			dispatchCompositeTest(argv);
+			break;
 
-		// 		case 'ds':
-		// 			dispatchDesaturate(argv);
-		// 			break;
+		case 'ds':
+			dispatchDesaturate(argv);
+			break;
 
-		// case 'f':
-		// 	dispatchFlip(argv);
-		// 	break;
+		case 'f':
+			dispatchFlip(argv);
+			break;
 
-		// 		case 'gb':
-		// 			dispatchGaussianBlur(argv);
-		// 			break;
+		case 'gb':
+			dispatchGaussianBlur(argv);
+			break;
 
-		// case 'm':
-		// 	dispatchMirror(argv);
-		// 	break;
+		case 'm':
+			dispatchMirror(argv);
+			break;
 
-		// 		case 'p':
-		// 			dispatchPixelate(argv);
-		// 			break;
+		case 'p':
+			dispatchPixelate(argv);
+			break;
 
 		case 'rs':
 			dispatchResample(argv);

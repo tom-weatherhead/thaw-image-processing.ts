@@ -4,20 +4,14 @@
 
 'use strict';
 
-import { IThAWImage } from './thawimage';
+import { createThAWImage, IThAWImage } from './thawimage';
 
-export function pixelateFromImage(
+export function pixelateImageFromBuffer(
 	srcImage: IThAWImage,
 	pixelWidth: number,
-	pixelHeight: number,
-	fnCreateImage: (
-		width: number,
-		height: number,
-		bytesPerPixel: number
-	) => IThAWImage
+	pixelHeight?: number
 ): IThAWImage {
-	// srcBuffer, srcWidth, srcHeight, srcInitialRowOffset, srcRowStride, srcPixelStride, numBytesPerPixel
-	const dstImage = fnCreateImage(
+	const dstImage = createThAWImage(
 		srcImage.width,
 		srcImage.height,
 		srcImage.bytesPerPixel
@@ -51,16 +45,15 @@ export function pixelateFromImage(
 						case 4:
 							accumulator3 +=
 								srcImage.data[srcPixelOffset2 + 3];
-						case 3: // eslint-disable-line
+						case 3:
 							accumulator2 +=
 								srcImage.data[srcPixelOffset2 + 2];
 							accumulator1 +=
 								srcImage.data[srcPixelOffset2 + 1];
-						case 1: // eslint-disable-line
+						case 1:
 							accumulator0 +=
 								srcImage.data[srcPixelOffset2 + 0];
 						default:
-							// eslint-disable-line
 							break;
 					}
 
@@ -86,13 +79,12 @@ export function pixelateFromImage(
 					switch (srcImage.bytesPerPixel) {
 						case 4:
 							dstImage.data[dstPixelOffset2 + 3] = result3;
-						case 3: // eslint-disable-line
+						case 3:
 							dstImage.data[dstPixelOffset2 + 2] = result2;
 							dstImage.data[dstPixelOffset2 + 1] = result1;
-						case 1: // eslint-disable-line
+						case 1:
 							dstImage.data[dstPixelOffset2 + 0] = result0;
 						default:
-							// eslint-disable-line
 							break;
 					}
 
@@ -112,7 +104,3 @@ export function pixelateFromImage(
 
 	return dstImage;
 }
-
-// module.exports = {
-// 	pixelateFromImage: pixelateFromImage,
-// };

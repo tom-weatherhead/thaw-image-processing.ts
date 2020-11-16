@@ -12,21 +12,28 @@ import { decode, encode } from 'jpeg-js';
 
 import { createThAWImage, IThAWImage } from '../thawimage';
 
-// import { flipImage } from '../flip';
-// import { mirrorImage } from '../mirror';
+import { compositeTest } from '../composite';
+import { convolveImageFromBuffer } from '../convolve';
+import { flipImage } from '../flip';
+import {
+	ColourMapperType,
+	mapColoursInImageFromBuffer
+} from '../map-colours';
+import { mirrorImage } from '../mirror';
+import { pixelateImageFromBuffer } from '../pixelate';
 import { resampleImageFromBuffer } from '../resample';
 
-const defaultJpegQuality = 90;
+export const defaultJpegQuality = 90;
 
 // **** 1) The JPEG File Manager ****
 
 // 1a) Types
 
-export interface IFileOptions {
+interface IFileOptions {
 	quality?: number;
 }
 
-export interface IFileManager {
+interface IFileManager {
 	load(path: string): IThAWImage;
 	save(image: IThAWImage, path: string): void;
 }
@@ -146,13 +153,78 @@ export function createJpegFileManager(
 // 	};
 // }
 
-// export const flipImageFromJpegFile: ImageOperationOnJpegFile = makeImageOperationOnJpegFile(
-// 	flipImage
-// );
+export function compositeTestFromJpegFile(
+	fileManager: IFileManager,
+	srcFilePath: string,
+	dstFilePath: string
+): void {
+	const srcImage = fileManager.load(srcFilePath);
+	const dstImage = compositeTest(srcImage);
 
-// export const mirrorImageFromJpegFile: ImageOperationOnJpegFile = makeImageOperationOnJpegFile(
-// 	mirrorImage
-// );
+	fileManager.save(dstImage, dstFilePath);
+}
+
+export function convolveImageFromJpegFile(
+	fileManager: IFileManager,
+	srcFilePath: string,
+	dstFilePath: string,
+	sigma: number,
+	kernelSize: number
+): void {
+	const srcImage = fileManager.load(srcFilePath);
+	const dstImage = convolveImageFromBuffer(srcImage, sigma, kernelSize);
+
+	fileManager.save(dstImage, dstFilePath);
+}
+
+export function flipImageFromJpegFile(
+	fileManager: IFileManager,
+	srcFilePath: string,
+	dstFilePath: string
+): void {
+	const srcImage = fileManager.load(srcFilePath);
+	const dstImage = flipImage(srcImage);
+
+	fileManager.save(dstImage, dstFilePath);
+}
+
+// Used by Desaturate:
+
+export function mapColoursInImageFromJpegFile(
+	fileManager: IFileManager,
+	srcFilePath: string,
+	dstFilePath: string,
+	fnColourMapper: ColourMapperType
+): void {
+	const srcImage = fileManager.load(srcFilePath);
+	const dstImage = mapColoursInImageFromBuffer(srcImage, fnColourMapper);
+
+	fileManager.save(dstImage, dstFilePath);
+}
+
+export function mirrorImageFromJpegFile(
+	fileManager: IFileManager,
+	srcFilePath: string,
+	dstFilePath: string
+): void {
+	const srcImage = fileManager.load(srcFilePath);
+	const dstImage = mirrorImage(srcImage);
+
+	fileManager.save(dstImage, dstFilePath);
+}
+
+export function pixelateImageFromJpegFile(
+	fileManager: IFileManager,
+	srcFilePath: string,
+	dstFilePath: string,
+	dstWidth: number,
+	dstHeight: number
+): void {
+	const srcImage = fileManager.load(srcFilePath);
+	const dstImage = pixelateImageFromBuffer(srcImage, dstWidth, dstHeight);
+
+	fileManager.save(dstImage, dstFilePath);
+}
 
 export function resampleImageFromJpegFile(
 	fileManager: IFileManager,
@@ -160,10 +232,8 @@ export function resampleImageFromJpegFile(
 	dstFilePath: string,
 	dstWidth: number,
 	dstHeight: number,
-	mode: number // ,
-	// dstQuality: number
+	mode: number
 ): void {
-	// const fileManager = createJpegFileManager(fsInjected);
 	const srcImage = fileManager.load(srcFilePath);
 	const dstImage = resampleImageFromBuffer(
 		srcImage,
@@ -171,8 +241,6 @@ export function resampleImageFromJpegFile(
 		dstHeight,
 		mode
 	);
-	// const dstFileOptions = { quality: dstQuality };
 
-	// fileManager.save(dstImage, dstFilePath, dstFileOptions);
 	fileManager.save(dstImage, dstFilePath);
 }

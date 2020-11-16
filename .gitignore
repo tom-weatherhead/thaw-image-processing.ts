@@ -106,3 +106,4 @@ dist
 .DS_Store
 lib/
 cli/cli*
+test/output-files/*.jpg
