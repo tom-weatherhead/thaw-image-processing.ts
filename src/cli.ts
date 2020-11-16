@@ -342,7 +342,11 @@ function dispatchRotate90DegreesClockwise(argv: string[]): void {
 	}
 
 	console.log('Rotate 90 degrees clockwise.');
-	engine.rotate90DegreesClockwiseFromJpegFile(jpegFileManager, srcFilePath, dstFilePath);
+	engine.rotate90DegreesClockwiseFromJpegFile(
+		jpegFileManager,
+		srcFilePath,
+		dstFilePath
+	);
 }
 
 function dispatchRotate90DegreesCounterclockwise(argv: string[]): void {
@@ -404,7 +408,11 @@ function dispatchRotate180Degrees(argv: string[]): void {
 	}
 
 	console.log('Rotate 180 degrees.');
-	engine.rotate180DegreesFromJpegFile(jpegFileManager, srcFilePath, dstFilePath);
+	engine.rotate180DegreesFromJpegFile(
+		jpegFileManager,
+		srcFilePath,
+		dstFilePath
+	);
 }
 
 function dispatch(argv: string[]): void {
