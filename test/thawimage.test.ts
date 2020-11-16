@@ -6,20 +6,12 @@ import * as engine from '../lib/main';
 
 test('Create image', () => {
 	// Arrange
-	// const expectedValue: number = 0;
 	const width = 1024;
 	const height = 768;
 	const bytesPerPixel = 4;
 
 	// Act
-	// const actualValue: number = 0; //engine.max([8, 6, 9, 5, 3, 0, 7]);
-	const image = engine.CreateThAWImage(
-		width,
-		height,
-		bytesPerPixel,
-		0,
-		null
-	);
+	const image = engine.createThAWImage(width, height, bytesPerPixel);
 
 	// Assert
 	// expect(actualValue).toEqual(expectedValue);
@@ -34,18 +26,12 @@ test('Fill image', () => {
 	// const expectedValue: number = 0;
 	const width = 40;
 	const height = 25;
-	const bytesPerPixel = 4;
+	// const bytesPerPixel = 4;
 	const srcColour: number[] = [64, 128, 192, 255];
 
 	// Act
 	// const actualValue: number = 0; //engine.max([8, 6, 9, 5, 3, 0, 7]);
-	const image = engine.CreateThAWImage(
-		width,
-		height,
-		bytesPerPixel,
-		0,
-		null
-	);
+	const image = engine.createThAWImage(width, height);
 
 	image.fill(0, 0, image.width, image.height, srcColour);
 
@@ -59,7 +45,7 @@ test('Fill image', () => {
 	expect(image).toBeTruthy();
 	expect(image.width).toEqual(width);
 	expect(image.height).toEqual(height);
-	expect(image.bytesPerPixel).toEqual(bytesPerPixel);
+	// expect(image.bytesPerPixel).toEqual(bytesPerPixel);
 	expect(sampledColour).toStrictEqual(srcColour); // We use .toStrictEqual() because we want a deep comparison of the two arrays.
 });
 

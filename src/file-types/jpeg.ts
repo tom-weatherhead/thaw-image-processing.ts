@@ -8,12 +8,12 @@ import * as fs from 'fs';
 // import * as jpegJs from 'jpeg-js';
 import { decode, encode } from 'jpeg-js';
 
-import { ifDefinedThenElse } from 'thaw-common-utilities.ts';
+// import { ifDefinedThenElse } from 'thaw-common-utilities.ts';
 
-import { CreateThAWImage, IThAWImage } from '../thawimage';
+import { createThAWImage, IThAWImage } from '../thawimage';
 
-import { flipImage } from '../flip';
-import { mirrorImage } from '../mirror';
+// import { flipImage } from '../flip';
+// import { mirrorImage } from '../mirror';
 import { resampleImageFromBuffer } from '../resample';
 
 const defaultJpegQuality = 90;
@@ -28,7 +28,12 @@ export interface IFileOptions {
 
 export interface IFileManager {
 	load(path: string): IThAWImage;
-	save(image: IThAWImage, path: string, options?: IFileOptions): void;
+	save(image: IThAWImage, path: string): void;
+}
+
+export interface IJpegFileManager extends IFileManager {
+	getDstImageQuality(): number;
+	setDstImageQuality(newDstImageQuality: number): void;
 }
 
 // 1b) Code
@@ -37,11 +42,11 @@ function loadJpegFile(fsInjected: typeof fs, path: string): IThAWImage {
 	const srcJpegData = fsInjected.readFileSync(path);
 	const srcImage = decode(srcJpegData);
 
-	return CreateThAWImage(
+	return createThAWImage(
 		srcImage.width,
 		srcImage.height,
-		0,
-		0,
+		undefined,
+		undefined,
 		Uint8ClampedArray.from(srcImage.data)
 	);
 }
@@ -65,11 +70,20 @@ function saveJpegFile(
 	fsInjected.writeFileSync(path, dstJpegData.data);
 }
 
-export function createJpegFileManager(fsInjected: typeof fs): IFileManager {
+export function createJpegFileManager(
+	fsInjected: typeof fs,
+	dstImageQuality = 90
+): IJpegFileManager {
 	return {
 		load: (path: string) => loadJpegFile(fsInjected, path),
-		save: (image: IThAWImage, path: string, options?: IFileOptions) =>
-			saveJpegFile(fsInjected, image, path, options)
+		save: (image: IThAWImage, path: string) =>
+			saveJpegFile(fsInjected, image, path, {
+				quality: dstImageQuality
+			}),
+		getDstImageQuality: () => dstImageQuality,
+		setDstImageQuality: (newDstImageQuality: number) => {
+			dstImageQuality = newDstImageQuality;
+		}
 	};
 }
 
@@ -78,9 +92,9 @@ export function createJpegFileManager(fsInjected: typeof fs): IFileManager {
 // 2a) Types
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface IOperationOptions {
-	// quality?: number;
-}
+// export interface IOperationOptions {
+// 	// quality?: number;
+// }
 
 // type ImageOperation = (
 // 	srcImage: IThAWImage,
@@ -141,15 +155,15 @@ export interface IOperationOptions {
 // );
 
 export function resampleImageFromJpegFile(
-	fsInjected: typeof fs,
+	fileManager: IFileManager,
 	srcFilePath: string,
 	dstFilePath: string,
 	dstWidth: number,
 	dstHeight: number,
-	mode: number,
-	dstQuality: number
+	mode: number // ,
+	// dstQuality: number
 ): void {
-	const fileManager = createJpegFileManager(fsInjected);
+	// const fileManager = createJpegFileManager(fsInjected);
 	const srcImage = fileManager.load(srcFilePath);
 	const dstImage = resampleImageFromBuffer(
 		srcImage,
@@ -157,7 +171,8 @@ export function resampleImageFromJpegFile(
 		dstHeight,
 		mode
 	);
-	const dstFileOptions = { quality: dstQuality };
+	// const dstFileOptions = { quality: dstQuality };
 
-	fileManager.save(dstImage, dstFilePath, dstFileOptions);
+	// fileManager.save(dstImage, dstFilePath, dstFileOptions);
+	fileManager.save(dstImage, dstFilePath);
 }

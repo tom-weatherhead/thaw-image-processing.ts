@@ -5,7 +5,7 @@
 'use strict';
 
 import {
-	CreateThAWImage,
+	createThAWImage,
 	IThAWImage,
 	ThAWImageBufferType
 } from './thawimage';
@@ -22,7 +22,7 @@ export function generateTestImage_SingleRGBAColour(
 	alpha: number
 ): IThAWImage {
 	// const image = fnCreateImage(width, height, 4);
-	const image = CreateThAWImage(width, height, 4);
+	const image = createThAWImage(width, height, 4);
 	const buffer = image.data;
 	let rowOffset = 0;
 
@@ -74,7 +74,7 @@ export function generateTestImage_GreyscaleGradient(
 	height: number
 ): IThAWImage {
 	// const image = fnCreateImage(width, height, 1);
-	const image = CreateThAWImage(width, height, 1);
+	const image = createThAWImage(width, height, 1);
 	const buffer = image.data;
 	let rowOffset = 0;
 

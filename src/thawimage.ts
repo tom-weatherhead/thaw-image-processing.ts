@@ -2,11 +2,23 @@
 
 'use strict';
 
+import {
+	ifDefinedThenElse,
+	isPositiveInteger
+} from 'thaw-common-utilities.ts';
+
 export const defaultBytesPerPixel = 4;
 
-function getBytesPerLine(width: number, bytesPerPixel: number): number {
-	return width * bytesPerPixel;
-	// return Math.ceil(width * bytesPerPixel / byteAlignmentOfLines) * byteAlignmentOfLines;
+function getAlignedBytesPerLine(rawBytesPerLine: number): number {
+	// return rawBytesPerLine;
+
+	// const byteAlignmentOfLines = 4;
+	const byteAlignmentOfLines = 8;
+
+	return (
+		Math.ceil(rawBytesPerLine / byteAlignmentOfLines) *
+		byteAlignmentOfLines
+	);
 }
 
 // From https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8ClampedArray :
@@ -23,12 +35,20 @@ export function createImageBuffer(size: number): ThAWImageBufferType {
 	return new Uint8ClampedArray(size);
 }
 
-export interface IThAWImage {
-	readonly width: number;
-	readonly height: number;
+// interface ImageData is defined in node_modules/typescript/lib/lib.dom.d.ts line 9552
+
+// interface ImageData {
+// 	readonly width: number;
+// 	readonly height: number;
+// 	readonly data: Uint8ClampedArray;
+// }
+
+export interface IThAWImage extends ImageData {
+	// readonly width: number;
+	// readonly height: number;
+	// readonly data: ThAWImageBufferType;
 	readonly bytesPerPixel: number;
 	readonly bytesPerLine: number;
-	readonly data: ThAWImageBufferType;
 	// colourModel: ???;
 
 	getPixelAsArray(row: number, column: number): number[];
@@ -45,12 +65,10 @@ export interface IThAWImage {
 class ThAWImage implements IThAWImage {
 	public readonly width: number;
 	public readonly height: number;
+	public readonly data: ThAWImageBufferType;
 	public readonly bytesPerPixel: number;
 	public readonly bytesPerLine: number;
-	public readonly data: ThAWImageBufferType;
 
-	// TODO: How to make some parameters optional in TypeScript?
-	// -> data?: ThAWImageBufferType
 	constructor(
 		width: number,
 		height: number,
@@ -58,27 +76,37 @@ class ThAWImage implements IThAWImage {
 		bytesPerLine?: number,
 		data?: ThAWImageBufferType
 	) {
+		if (!isPositiveInteger(width) || !isPositiveInteger(height)) {
+			throw new Error(
+				'ThAWImage constructor: width or height is not a positive integer'
+			);
+		}
+
+		if (typeof bytesPerPixel === 'undefined') {
+			bytesPerPixel = defaultBytesPerPixel;
+		} else if (!isPositiveInteger(bytesPerPixel)) {
+			throw new Error(
+				'ThAWImage constructor: bytesPerPixel is not a positive integer'
+			);
+		}
+
+		if (typeof bytesPerLine === 'undefined') {
+			bytesPerLine = width * bytesPerPixel;
+		} else if (!isPositiveInteger(bytesPerPixel)) {
+			throw new Error(
+				'ThAWImage constructor: bytesPerLine is not a positive integer'
+			);
+		}
+
 		this.width = width;
 		this.height = height;
-		this.bytesPerPixel = bytesPerPixel
-			? bytesPerPixel
-			: defaultBytesPerPixel;
-		this.bytesPerLine = bytesPerLine
-			? bytesPerLine
-			: getBytesPerLine(this.width, this.bytesPerPixel);
-		this.data = data
-			? (data as ThAWImageBufferType)
-			: createImageBuffer(this.bytesPerLine * this.height); // Buffer.unsafealloc() ?
-		// console.log('this.width is', this.width);
-		// console.log('this.height is', this.height);
-		// console.log('this.bytesPerPixel is', this.bytesPerPixel);
-		// console.log('this.bytesPerLine is', this.bytesPerLine);
-		// console.log('this.data is', this.data);
+		this.bytesPerPixel = bytesPerPixel;
+		this.bytesPerLine = getAlignedBytesPerLine(bytesPerLine);
+		this.data = ifDefinedThenElse(
+			data,
+			createImageBuffer(this.bytesPerLine * this.height)
+		);
 	}
-
-	// test () {
-	// 	console.log('Success!');
-	// }
 
 	public getPixelAsArray(row: number, column: number): number[] {
 		const result: number[] = [];
@@ -160,24 +188,12 @@ class ThAWImage implements IThAWImage {
 	}
 }
 
-export function CreateThAWImage(
+export function createThAWImage(
 	width: number,
 	height: number,
 	bytesPerPixel?: number,
 	bytesPerLine?: number,
 	data?: ThAWImageBufferType
 ): IThAWImage {
-	if (typeof bytesPerPixel === 'undefined' || bytesPerPixel <= 0) {
-		bytesPerPixel = defaultBytesPerPixel;
-	}
-
-	if (typeof bytesPerLine === 'undefined' || bytesPerLine <= 0) {
-		bytesPerLine = width * bytesPerPixel;
-	}
-
-	// if (typeof data === 'undefined') {
-	// 	data = null;
-	// }
-
 	return new ThAWImage(width, height, bytesPerPixel, bytesPerLine, data);
 }

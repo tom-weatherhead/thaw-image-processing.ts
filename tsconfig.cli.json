@@ -1,0 +1,17 @@
+{
+	"compilerOptions": {
+		"declaration": true,
+		"module": "es2015",
+		"moduleResolution": "node",
+		"outDir": "./cli",
+		"sourceMap": false,
+		"strict": true,
+		"target": "es2015",
+		"types": [
+			"node"
+		]
+	},
+	"files": [
+		"src/cli.ts"
+	]
+}

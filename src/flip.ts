@@ -2,21 +2,21 @@
 
 'use strict';
 
-import { IOperationOptions } from './file-types/jpeg';
+// import { IOperationOptions } from './file-types/jpeg';
 
 import {
 	createAffineTransformationMatrix,
 	doAffineTransformation
 } from './affine';
 
-import { CreateThAWImage, IThAWImage } from './thawimage';
+import { createThAWImage, IThAWImage } from './thawimage';
 
 export function flipImage(
-	srcImage: IThAWImage,
+	srcImage: IThAWImage // ,
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	operationOptions?: IOperationOptions
+	// operationOptions?: IOperationOptions
 ): IThAWImage {
-	const dstImage = CreateThAWImage(
+	const dstImage = createThAWImage(
 		srcImage.width,
 		srcImage.height,
 		srcImage.bytesPerPixel

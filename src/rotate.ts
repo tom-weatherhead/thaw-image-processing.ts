@@ -3,7 +3,7 @@
 'use strict';
 
 import { MapCoordinatesFunction } from './map-coordinates';
-import { CreateThAWImage, IThAWImage } from './thawimage';
+import { createThAWImage, IThAWImage } from './thawimage';
 
 export function rotate90DegreesClockwiseFromImage(
 	srcImage: IThAWImage,
@@ -11,7 +11,7 @@ export function rotate90DegreesClockwiseFromImage(
 	fnMapCoordinates: MapCoordinatesFunction
 ): IThAWImage {
 	// Dependency injection.
-	const dstImage = CreateThAWImage(
+	const dstImage = createThAWImage(
 		srcImage.height,
 		srcImage.width,
 		srcImage.bytesPerPixel
@@ -40,7 +40,7 @@ export function rotate90DegreesCounterclockwiseFromImage(
 	fnMapCoordinates: MapCoordinatesFunction
 ): IThAWImage {
 	// Dependency injection.
-	const dstImage = CreateThAWImage(
+	const dstImage = createThAWImage(
 		srcImage.height,
 		srcImage.width,
 		srcImage.bytesPerPixel
@@ -69,7 +69,7 @@ export function rotate180DegreesFromImage(
 	fnMapCoordinates: MapCoordinatesFunction
 ): IThAWImage {
 	// Dependency injection.
-	const dstImage = CreateThAWImage(
+	const dstImage = createThAWImage(
 		srcImage.width,
 		srcImage.height,
 		srcImage.bytesPerPixel

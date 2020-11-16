@@ -48,7 +48,7 @@
 
 import {
 	createImageBuffer,
-	CreateThAWImage,
+	createThAWImage,
 	IThAWImage,
 	ThAWImageBufferType
 } from './thawimage';
@@ -431,7 +431,7 @@ export function resampleImageFromBuffer(
 	// 	data: dstBuffer,
 	// };
 
-	return CreateThAWImage(
+	return createThAWImage(
 		dstWidth,
 		dstHeight,
 		numBytesPerPixel,

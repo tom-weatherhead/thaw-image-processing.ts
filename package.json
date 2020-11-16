@@ -50,6 +50,7 @@
 		"prettier-format": "prettier --write \"./*.js\" \"src/**/*.ts\" \"test/**/*.ts\"",
 		"lint": "eslint . --ext .js --ext .ts",
 		"build": "rm -rf lib; tsc",
+		"build-cli": "rm -f lib/cli.js; tsc -p tsconfig.cli.json",
 		"test": "rm -rf coverage; jest --detectOpenHandles --forceExit",
 		"deploy": "eval mv $npm_package_name-$npm_package_version.tgz $(echo $npm_package_config_deploy_target_dir)/",
 		"prepare": "npm run build",
@@ -61,7 +62,8 @@
 		"loc": "git ls-files | grep -v package-lock.json | tr -d '\\r' | tr '\\n' '\\0' | xargs -0 wc -l",
 		"f": "npm run prettier-format && npm run all",
 		"start": "npm run all",
-		"x": "node lib/cli.js f && node lib/cli.js m"
+		"x": "node lib/cli.js f && node lib/cli.js m",
+		"cli": "./loader.js"
 	},
 	"config": {
 		"deploy_target_dir": "$NPM_PKG_DIR"
@@ -81,6 +83,7 @@
 		"@typescript-eslint/eslint-plugin": "^4.7.0",
 		"@typescript-eslint/parser": "^4.7.0",
 		"eslint": "^7.13.0",
+		"esm": "^3.2.25",
 		"jest": "^26.6.3",
 		"prettier": "^2.1.2",
 		"semver": "^7.3.2",

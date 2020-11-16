@@ -6,6 +6,8 @@
 
 // E.g. : npm start -- -sc -w 235 -h 763 in.jpg out.jpg -q 34
 
+import * as fs from 'fs';
+
 // const fs = require('fs');
 // // const path = require('path');
 
@@ -14,7 +16,8 @@
 // };
 
 // const engine = require('..')(options);
-import * as engine from './main';
+// import * as engine from './main';
+import * as engine from '..';
 
 // // const engine = require('..')();
 
@@ -22,6 +25,8 @@ import * as engine from './main';
 // // -sn = Nearest Neighbour
 // // -sl = Bilinear
 // // -sc = Bicubic
+
+const jpegFileManager = engine.createJpegFileManager(fs);
 
 // //const defaultSrcFilePath = 'test/input-files/unconventional-table.jpg';
 const defaultSrcFilePath = 'test/input-files/fast-and-fourier.jpg';
@@ -114,25 +119,25 @@ const defaultSrcFilePath = 'test/input-files/fast-and-fourier.jpg';
 // 	engine.mapColoursInImageFromJpegFile(srcFilePath, dstFilePath, engine.desaturateRGBA);
 // }
 
-function dispatchFlip(argv: string[]): void {
-	const srcFilePath = defaultSrcFilePath;
-	const dstFilePath = 'test/output-files/flip.jpg';
+// function dispatchFlip(argv: string[]): void {
+// 	const srcFilePath = defaultSrcFilePath;
+// 	const dstFilePath = 'test/output-files/flip.jpg';
 
-	// for (let i = 0; i < argv.length; i++) {
-	// 	const arg = argv[i];
+// 	// for (let i = 0; i < argv.length; i++) {
+// 	// 	const arg = argv[i];
 
-	// 	if (arg.substr(0, 1) !== '-') {
-	// 		if (!srcFilePath) {
-	// 			srcFilePath = arg;
-	// 		} else if (!dstFilePath) {
-	// 			dstFilePath = arg;
-	// 		}
-	// 	}
-	// }
+// 	// 	if (arg.substr(0, 1) !== '-') {
+// 	// 		if (!srcFilePath) {
+// 	// 			srcFilePath = arg;
+// 	// 		} else if (!dstFilePath) {
+// 	// 			dstFilePath = arg;
+// 	// 		}
+// 	// 	}
+// 	// }
 
-	console.log('Flip:', argv);
-	engine.flipImageFromJpegFile(srcFilePath, dstFilePath);
-}
+// 	console.log('Flip:', argv);
+// 	engine.flipImageFromJpegFile(srcFilePath, dstFilePath);
+// }
 
 // function dispatchGaussianBlur (argv) {
 // 	let srcFilePath = defaultSrcFilePath;
@@ -192,25 +197,25 @@ function dispatchFlip(argv: string[]): void {
 // 	engine.mirrorImageFromJpegFile(srcFilePath, dstFilePath);
 // }
 
-function dispatchMirror(argv: string[]): void {
-	const srcFilePath = defaultSrcFilePath;
-	const dstFilePath = 'test/output-files/mirror.jpg';
+// function dispatchMirror(argv: string[]): void {
+// 	const srcFilePath = defaultSrcFilePath;
+// 	const dstFilePath = 'test/output-files/mirror.jpg';
 
-	// for (let i = 0; i < argv.length; i++) {
-	// 	const arg = argv[i];
+// 	// for (let i = 0; i < argv.length; i++) {
+// 	// 	const arg = argv[i];
 
-	// 	if (arg.substr(0, 1) !== '-') {
-	// 		if (!srcFilePath) {
-	// 			srcFilePath = arg;
-	// 		} else if (!dstFilePath) {
-	// 			dstFilePath = arg;
-	// 		}
-	// 	}
-	// }
+// 	// 	if (arg.substr(0, 1) !== '-') {
+// 	// 		if (!srcFilePath) {
+// 	// 			srcFilePath = arg;
+// 	// 		} else if (!dstFilePath) {
+// 	// 			dstFilePath = arg;
+// 	// 		}
+// 	// 	}
+// 	// }
 
-	console.log('Mirror:', argv);
-	engine.mirrorImageFromJpegFile(srcFilePath, dstFilePath);
-}
+// 	console.log('Mirror:', argv);
+// 	engine.mirrorImageFromJpegFile(srcFilePath, dstFilePath);
+// }
 
 // function dispatchPixelate (argv) {
 // 	let srcFilePath = defaultSrcFilePath;
@@ -285,6 +290,7 @@ function dispatchResample(argv: string[]): void {
 				dstHeight = parseInt(nextArg);
 			} else if (arg === '-q') {
 				dstQuality = parseInt(nextArg);
+				jpegFileManager.setDstImageQuality(dstQuality);
 			}
 		}
 	}
@@ -300,12 +306,13 @@ function dispatchResample(argv: string[]): void {
 	console.log('Resample.');
 	//console.log(`engine.resampleImageFromJpegFile(${srcFilePath}, ${dstFilePath}, ${dstWidth}, ${dstHeight}, ${mode}, ${dstQuality});`);
 	engine.resampleImageFromJpegFile(
+		jpegFileManager,
 		srcFilePath,
 		dstFilePath,
 		dstWidth,
 		dstHeight,
-		mode,
-		dstQuality
+		mode // ,
+		// dstQuality
 	);
 }
 
@@ -408,17 +415,17 @@ function dispatch(argv: string[]): void {
 		// 			dispatchDesaturate(argv);
 		// 			break;
 
-		case 'f':
-			dispatchFlip(argv);
-			break;
+		// case 'f':
+		// 	dispatchFlip(argv);
+		// 	break;
 
 		// 		case 'gb':
 		// 			dispatchGaussianBlur(argv);
 		// 			break;
 
-		case 'm':
-			dispatchMirror(argv);
-			break;
+		// case 'm':
+		// 	dispatchMirror(argv);
+		// 	break;
 
 		// 		case 'p':
 		// 			dispatchPixelate(argv);
