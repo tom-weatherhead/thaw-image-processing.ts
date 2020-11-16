@@ -22,6 +22,11 @@ import {
 import { mirrorImage } from '../mirror';
 import { pixelateImageFromBuffer } from '../pixelate';
 import { resampleImageFromBuffer } from '../resample';
+import {
+	rotate180DegreesFromImage,
+	rotate90DegreesClockwiseFromImage,
+	rotate90DegreesCounterclockwiseFromImage
+} from '../rotate';
 
 export const defaultJpegQuality = 90;
 
@@ -241,6 +246,39 @@ export function resampleImageFromJpegFile(
 		dstHeight,
 		mode
 	);
+
+	fileManager.save(dstImage, dstFilePath);
+}
+
+export function rotate90DegreesClockwiseFromJpegFile(
+	fileManager: IFileManager,
+	srcFilePath: string,
+	dstFilePath: string
+): void {
+	const srcImage = fileManager.load(srcFilePath);
+	const dstImage = rotate90DegreesClockwiseFromImage(srcImage);
+
+	fileManager.save(dstImage, dstFilePath);
+}
+
+export function rotate90DegreesCounterclockwiseFromJpegFile(
+	fileManager: IFileManager,
+	srcFilePath: string,
+	dstFilePath: string
+): void {
+	const srcImage = fileManager.load(srcFilePath);
+	const dstImage = rotate90DegreesCounterclockwiseFromImage(srcImage);
+
+	fileManager.save(dstImage, dstFilePath);
+}
+
+export function rotate180DegreesFromJpegFile(
+	fileManager: IFileManager,
+	srcFilePath: string,
+	dstFilePath: string
+): void {
+	const srcImage = fileManager.load(srcFilePath);
+	const dstImage = rotate180DegreesFromImage(srcImage);
 
 	fileManager.save(dstImage, dstFilePath);
 }

@@ -316,92 +316,96 @@ function dispatchResample(argv: string[]): void {
 	);
 }
 
-// function dispatchRotate90DegreesClockwise (argv) {
-// 	let srcFilePath = defaultSrcFilePath;
-// 	let dstFilePath = 'test/output-files/rotate90cw.jpg';
-// 	let dstQuality = engine.defaultJpegQuality;
+function dispatchRotate90DegreesClockwise(argv: string[]): void {
+	let srcFilePath = defaultSrcFilePath;
+	let dstFilePath = 'test/output-files/rotate90cw.jpg';
+	let dstQuality = engine.defaultJpegQuality;
 
-// 	for (let i = 0; i < argv.length; i++) {
-// 		const arg = argv[i];
+	for (let i = 0; i < argv.length; i++) {
+		const arg = argv[i];
 
-// 		if (arg.substr(0, 1) !== '-') {
+		if (arg.substr(0, 1) !== '-') {
+			if (!srcFilePath) {
+				srcFilePath = arg;
+			} else if (!dstFilePath) {
+				dstFilePath = arg;
+			}
+		} else if (i < argv.length - 1) {
+			const nextArg = argv[i + 1];
+			i++;
 
-// 			if (!srcFilePath) {
-// 				srcFilePath = arg;
-// 			} else if (!dstFilePath) {
-// 				dstFilePath = arg;
-// 			}
-// 		} else if (i < argv.length - 1) {
-// 			const nextArg = argv[i + 1];
-// 			i++;
+			if (arg === '-q') {
+				dstQuality = parseInt(nextArg);
+				jpegFileManager.setDstImageQuality(dstQuality);
+			}
+		}
+	}
 
-// 			if (arg === '-q') {
-// 				dstQuality = parseInt(nextArg);
-// 			}
-// 		}
-// 	}
+	console.log('Rotate 90 degrees clockwise.');
+	engine.rotate90DegreesClockwiseFromJpegFile(jpegFileManager, srcFilePath, dstFilePath);
+}
 
-// 	console.log('Rotate 90 degrees clockwise.');
-// 	engine.rotate90DegreesClockwiseFromJpegFile(srcFilePath, dstFilePath, dstQuality);
-// }
+function dispatchRotate90DegreesCounterclockwise(argv: string[]): void {
+	let srcFilePath = defaultSrcFilePath;
+	let dstFilePath = 'test/output-files/rotate90ccw.jpg';
+	let dstQuality = engine.defaultJpegQuality;
 
-// function dispatchRotate90DegreesCounterclockwise (argv) {
-// 	let srcFilePath = defaultSrcFilePath;
-// 	let dstFilePath = 'test/output-files/rotate90ccw.jpg';
-// 	let dstQuality = engine.defaultJpegQuality;
+	for (let i = 0; i < argv.length; i++) {
+		const arg = argv[i];
 
-// 	for (let i = 0; i < argv.length; i++) {
-// 		const arg = argv[i];
+		if (arg.substr(0, 1) !== '-') {
+			if (!srcFilePath) {
+				srcFilePath = arg;
+			} else if (!dstFilePath) {
+				dstFilePath = arg;
+			}
+		} else if (i < argv.length - 1) {
+			const nextArg = argv[i + 1];
+			i++;
 
-// 		if (arg.substr(0, 1) !== '-') {
+			if (arg === '-q') {
+				dstQuality = parseInt(nextArg);
+				jpegFileManager.setDstImageQuality(dstQuality);
+			}
+		}
+	}
 
-// 			if (!srcFilePath) {
-// 				srcFilePath = arg;
-// 			} else if (!dstFilePath) {
-// 				dstFilePath = arg;
-// 			}
-// 		} else if (i < argv.length - 1) {
-// 			const nextArg = argv[i + 1];
-// 			i++;
+	console.log('Rotate 90 degrees counter-clockwise.');
+	engine.rotate90DegreesCounterclockwiseFromJpegFile(
+		jpegFileManager,
+		srcFilePath,
+		dstFilePath
+	);
+}
 
-// 			if (arg === '-q') {
-// 				dstQuality = parseInt(nextArg);
-// 			}
-// 		}
-// 	}
+function dispatchRotate180Degrees(argv: string[]): void {
+	let srcFilePath = defaultSrcFilePath;
+	let dstFilePath = 'test/output-files/rotate180.jpg';
+	let dstQuality = engine.defaultJpegQuality;
 
-// 	console.log('Rotate 90 degrees counter-clockwise.');
-// 	engine.rotate90DegreesCounterclockwiseFromJpegFile(srcFilePath, dstFilePath, dstQuality);
-// }
+	for (let i = 0; i < argv.length; i++) {
+		const arg = argv[i];
 
-// function dispatchRotate180Degrees (argv) {
-// 	let srcFilePath = defaultSrcFilePath;
-// 	let dstFilePath = 'test/output-files/rotate180.jpg';
-// 	let dstQuality = engine.defaultJpegQuality;
+		if (arg.substr(0, 1) !== '-') {
+			if (!srcFilePath) {
+				srcFilePath = arg;
+			} else if (!dstFilePath) {
+				dstFilePath = arg;
+			}
+		} else if (i < argv.length - 1) {
+			const nextArg = argv[i + 1];
+			i++;
 
-// 	for (let i = 0; i < argv.length; i++) {
-// 		const arg = argv[i];
+			if (arg === '-q') {
+				dstQuality = parseInt(nextArg);
+				jpegFileManager.setDstImageQuality(dstQuality);
+			}
+		}
+	}
 
-// 		if (arg.substr(0, 1) !== '-') {
-
-// 			if (!srcFilePath) {
-// 				srcFilePath = arg;
-// 			} else if (!dstFilePath) {
-// 				dstFilePath = arg;
-// 			}
-// 		} else if (i < argv.length - 1) {
-// 			const nextArg = argv[i + 1];
-// 			i++;
-
-// 			if (arg === '-q') {
-// 				dstQuality = parseInt(nextArg);
-// 			}
-// 		}
-// 	}
-
-// 	console.log('Rotate 180 degrees.');
-// 	engine.rotate180DegreesFromJpegFile(srcFilePath, dstFilePath, dstQuality);
-// }
+	console.log('Rotate 180 degrees.');
+	engine.rotate180DegreesFromJpegFile(jpegFileManager, srcFilePath, dstFilePath);
+}
 
 function dispatch(argv: string[]): void {
 	const command = argv.shift();
@@ -435,17 +439,17 @@ function dispatch(argv: string[]): void {
 			dispatchResample(argv);
 			break;
 
-		// 		case 'r90ccw':
-		// 			dispatchRotate90DegreesCounterclockwise(argv);
-		// 			break;
+		case 'r90ccw':
+			dispatchRotate90DegreesCounterclockwise(argv);
+			break;
 
-		// 		case 'r90cw':
-		// 			dispatchRotate90DegreesClockwise(argv);
-		// 			break;
+		case 'r90cw':
+			dispatchRotate90DegreesClockwise(argv);
+			break;
 
-		// 		case 'r180':
-		// 			dispatchRotate180Degrees(argv);
-		// 			break;
+		case 'r180':
+			dispatchRotate180Degrees(argv);
+			break;
 
 		default:
 			console.error('Unrecognized command:', command);

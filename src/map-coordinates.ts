@@ -6,7 +6,7 @@
 
 import { ThAWImageBufferType } from './thawimage';
 
-export type MapCoordinatesFunction = (
+export type CoordinatesMapperType = (
 	dstBuffer: ThAWImageBufferType,
 	dstWidth: number,
 	dstHeight: number,

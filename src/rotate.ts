@@ -2,22 +2,19 @@
 
 'use strict';
 
-import { MapCoordinatesFunction } from './map-coordinates';
+import { mapImageByCoordinatesFromBuffer } from './map-coordinates';
 import { createThAWImage, IThAWImage } from './thawimage';
 
 export function rotate90DegreesClockwiseFromImage(
-	srcImage: IThAWImage,
-	// fnCreateImage,
-	fnMapCoordinates: MapCoordinatesFunction
+	srcImage: IThAWImage
 ): IThAWImage {
-	// Dependency injection.
 	const dstImage = createThAWImage(
 		srcImage.height,
 		srcImage.width,
 		srcImage.bytesPerPixel
 	);
 
-	fnMapCoordinates(
+	mapImageByCoordinatesFromBuffer(
 		dstImage.data,
 		dstImage.width,
 		dstImage.height,
@@ -35,18 +32,15 @@ export function rotate90DegreesClockwiseFromImage(
 }
 
 export function rotate90DegreesCounterclockwiseFromImage(
-	srcImage: IThAWImage,
-	// fnCreateImage,
-	fnMapCoordinates: MapCoordinatesFunction
+	srcImage: IThAWImage
 ): IThAWImage {
-	// Dependency injection.
 	const dstImage = createThAWImage(
 		srcImage.height,
 		srcImage.width,
 		srcImage.bytesPerPixel
 	);
 
-	fnMapCoordinates(
+	mapImageByCoordinatesFromBuffer(
 		dstImage.data,
 		dstImage.width,
 		dstImage.height,
@@ -63,19 +57,14 @@ export function rotate90DegreesCounterclockwiseFromImage(
 	return dstImage;
 }
 
-export function rotate180DegreesFromImage(
-	srcImage: IThAWImage,
-	// fnCreateImage,
-	fnMapCoordinates: MapCoordinatesFunction
-): IThAWImage {
-	// Dependency injection.
+export function rotate180DegreesFromImage(srcImage: IThAWImage): IThAWImage {
 	const dstImage = createThAWImage(
 		srcImage.width,
 		srcImage.height,
 		srcImage.bytesPerPixel
 	);
 
-	fnMapCoordinates(
+	mapImageByCoordinatesFromBuffer(
 		dstImage.data,
 		dstImage.width,
 		dstImage.height,
@@ -92,9 +81,3 @@ export function rotate180DegreesFromImage(
 
 	return dstImage;
 }
-
-// module.exports = {
-// 	rotate90DegreesClockwiseFromImage: rotate90DegreesClockwiseFromImage,
-// 	rotate90DegreesCounterclockwiseFromImage: rotate90DegreesCounterclockwiseFromImage,
-// 	rotate180DegreesFromImage: rotate180DegreesFromImage
-// };
