@@ -5,13 +5,15 @@ import {
 	isPositiveInteger
 } from 'thaw-common-utilities.ts';
 
+export enum ColourModel {
+	RGBA32 // 4 channels * 8 bits per channel
+}
+
 export const defaultBytesPerPixel = 4;
 
 function getAlignedBytesPerLine(rawBytesPerLine: number): number {
-	// return rawBytesPerLine;
-
-	// const byteAlignmentOfLines = 4;
-	const byteAlignmentOfLines = 8;
+	const byteAlignmentOfLines = 4;
+	// const byteAlignmentOfLines = 8;
 
 	return (
 		Math.ceil(rawBytesPerLine / byteAlignmentOfLines) *
@@ -47,7 +49,7 @@ export interface IThAWImage extends ImageData {
 	// readonly data: ThAWImageBufferType;
 	readonly bytesPerPixel: number;
 	readonly bytesPerLine: number;
-	// colourModel: ???;
+	readonly colourModel: ColourModel;
 
 	getPixelAsArray(row: number, column: number): number[];
 	// copy(dstRow: number, dstColumn: number, width: number, height: number, srcImage: IThAWImage, srcRow: number, srcColumn: number): IThAWImage;
@@ -66,12 +68,14 @@ class ThAWImage implements IThAWImage {
 	public readonly data: ThAWImageBufferType;
 	public readonly bytesPerPixel: number;
 	public readonly bytesPerLine: number;
+	public readonly colourModel = ColourModel.RGBA32;
 
 	constructor(
 		width: number,
 		height: number,
 		bytesPerPixel?: number,
 		bytesPerLine?: number,
+		// colourModel?: ColourModel,
 		data?: ThAWImageBufferType
 	) {
 		if (!isPositiveInteger(width) || !isPositiveInteger(height)) {
@@ -100,6 +104,7 @@ class ThAWImage implements IThAWImage {
 		this.height = height;
 		this.bytesPerPixel = bytesPerPixel;
 		this.bytesPerLine = getAlignedBytesPerLine(bytesPerLine);
+		// this.colourModel = colourModel;
 		this.data = ifDefinedThenElse(
 			data,
 			createImageBuffer(this.bytesPerLine * this.height)
@@ -191,7 +196,14 @@ export function createThAWImage(
 	height: number,
 	bytesPerPixel?: number,
 	bytesPerLine?: number,
+	// colourModel?: ColourModel,
 	data?: ThAWImageBufferType
 ): IThAWImage {
-	return new ThAWImage(width, height, bytesPerPixel, bytesPerLine, data);
+	return new ThAWImage(
+		width,
+		height,
+		bytesPerPixel,
+		bytesPerLine,
+		/* colourModel, */ data
+	);
 }

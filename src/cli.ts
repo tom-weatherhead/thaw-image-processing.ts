@@ -4,18 +4,7 @@
 
 import * as fs from 'fs';
 
-// const fs = require('fs');
-// // const path = require('path');
-
-// const options = {
-// 	fs: fs // require('fs')
-// };
-
-// const engine = require('..')(options);
-// import * as engine from './main';
 import * as engine from '..';
-
-// // const engine = require('..')();
 
 // // CLI: resample-jpeg [-sn | -sl | -sc] -w dstWidth -h dstHeight
 // // -sn = Nearest Neighbour
@@ -64,15 +53,10 @@ const defaultSrcFilePath = 'test/input-files/fast-and-fourier.jpg';
 
 function dispatchCompositeTest(argv: string[]): void {
 	let srcFilePath = defaultSrcFilePath;
-	// let srcFilePath = '../' + defaultSrcFilePath;
-	// let srcFilePath = __dirname + '/../' + defaultSrcFilePath;
-	// let srcFilePath = path.normalize(path.join(__dirname, '..', defaultSrcFilePath));
-
 	let dstFilePath = 'test/output-files/composite-test.jpg';
 
 	if (!fs.existsSync(srcFilePath)) {
 		console.log(`There is no file at the path ${srcFilePath}`);
-		// console.log(`__dirname is ${__dirname}`);
 
 		return;
 	}
@@ -149,7 +133,6 @@ function dispatchGaussianBlur(argv: string[]): void {
 	let sigma = 4.0;
 	// let kernelSize = 5; // kernelSize must be an odd positive integer smaller than 999.
 	let kernelSize = 21;
-	let dstQuality = jpegFileManager.getDstImageQuality();
 
 	for (let i = 0; i < argv.length; i++) {
 		const arg = argv[i];
@@ -168,16 +151,16 @@ function dispatchGaussianBlur(argv: string[]): void {
 			if (arg === '-s') {
 				sigma = parseFloat(nextArg);
 			} else if (arg === '-ks') {
-				kernelSize = parseInt(nextArg);
+				kernelSize = parseInt(nextArg, 10);
 			} else if (arg === '-q') {
-				dstQuality = parseInt(nextArg);
+				const dstQuality = parseInt(nextArg, 10);
+
 				jpegFileManager.setDstImageQuality(dstQuality);
 			}
 		}
 	}
 
 	console.log('Gaussian blur.');
-	//console.log(`engine.convolveImageFromJpegFile(${srcFilePath}, ${dstFilePath}, ${sigma}, ${kernelSize}, ${dstQuality});`);
 	engine.convolveImageFromJpegFile(
 		jpegFileManager,
 		srcFilePath,
@@ -212,7 +195,6 @@ function dispatchPixelate(argv: string[]): void {
 	let dstFilePath = 'test/output-files/pixelate.jpg';
 	let pixelWidth = 8;
 	let pixelHeight = 8;
-	let dstQuality = jpegFileManager.getDstImageQuality();
 
 	for (let i = 0; i < argv.length; i++) {
 		const arg = argv[i];
@@ -229,18 +211,18 @@ function dispatchPixelate(argv: string[]): void {
 			i++;
 
 			if (arg === '-w') {
-				pixelWidth = parseInt(nextArg);
+				pixelWidth = parseInt(nextArg, 10);
 			} else if (arg === '-h') {
-				pixelHeight = parseInt(nextArg);
+				pixelHeight = parseInt(nextArg, 10);
 			} else if (arg === '-q') {
-				dstQuality = parseInt(nextArg);
+				const dstQuality = parseInt(nextArg, 10);
+
 				jpegFileManager.setDstImageQuality(dstQuality);
 			}
 		}
 	}
 
 	console.log('Pixelate.');
-	//console.log(`engine.resampleImageFromJpegFile(${srcFilePath}, ${dstFilePath}, ${dstWidth}, ${dstHeight}, ${mode}, ${dstQuality});`);
 	engine.pixelateImageFromJpegFile(
 		jpegFileManager,
 		srcFilePath,
@@ -255,10 +237,9 @@ function dispatchResample(argv: string[]): void {
 	let dstFilePath = 'test/output-files/resample.jpg';
 	let dstWidth = 0;
 	let dstHeight = 0;
-	let dstQuality = jpegFileManager.getDstImageQuality();
 	const defaultDstWidth = 640;
 	const defaultDstHeight = 480;
-	let mode = engine.modeBicubic;
+	let mode = engine.ResamplingMode.Bicubic;
 
 	for (let i = 0; i < argv.length; i++) {
 		const arg = argv[i];
@@ -271,21 +252,22 @@ function dispatchResample(argv: string[]): void {
 				dstFilePath = arg;
 			}
 		} else if (arg === '-sn') {
-			mode = engine.modeNearestNeighbour;
+			mode = engine.ResamplingMode.NearestNeighbour;
 		} else if (arg === '-sl') {
-			mode = engine.modeBilinear;
+			mode = engine.ResamplingMode.Bilinear;
 		} else if (arg === '-sc') {
-			mode = engine.modeBicubic;
+			mode = engine.ResamplingMode.Bicubic;
 		} else if (i < argv.length - 1) {
 			const nextArg = argv[i + 1];
 			i++;
 
 			if (arg === '-w') {
-				dstWidth = parseInt(nextArg);
+				dstWidth = parseInt(nextArg, 10);
 			} else if (arg === '-h') {
-				dstHeight = parseInt(nextArg);
+				dstHeight = parseInt(nextArg, 10);
 			} else if (arg === '-q') {
-				dstQuality = parseInt(nextArg);
+				const dstQuality = parseInt(nextArg, 10);
+
 				jpegFileManager.setDstImageQuality(dstQuality);
 			}
 		}
@@ -300,22 +282,19 @@ function dispatchResample(argv: string[]): void {
 	}
 
 	console.log('Resample.');
-	//console.log(`engine.resampleImageFromJpegFile(${srcFilePath}, ${dstFilePath}, ${dstWidth}, ${dstHeight}, ${mode}, ${dstQuality});`);
 	engine.resampleImageFromJpegFile(
 		jpegFileManager,
 		srcFilePath,
 		dstFilePath,
 		dstWidth,
 		dstHeight,
-		mode // ,
-		// dstQuality
+		mode
 	);
 }
 
 function dispatchRotate90DegreesClockwise(argv: string[]): void {
 	let srcFilePath = defaultSrcFilePath;
 	let dstFilePath = 'test/output-files/rotate90cw.jpg';
-	let dstQuality = jpegFileManager.getDstImageQuality();
 
 	for (let i = 0; i < argv.length; i++) {
 		const arg = argv[i];
@@ -331,7 +310,8 @@ function dispatchRotate90DegreesClockwise(argv: string[]): void {
 			i++;
 
 			if (arg === '-q') {
-				dstQuality = parseInt(nextArg);
+				const dstQuality = parseInt(nextArg, 10);
+
 				jpegFileManager.setDstImageQuality(dstQuality);
 			}
 		}
@@ -348,7 +328,6 @@ function dispatchRotate90DegreesClockwise(argv: string[]): void {
 function dispatchRotate90DegreesCounterclockwise(argv: string[]): void {
 	let srcFilePath = defaultSrcFilePath;
 	let dstFilePath = 'test/output-files/rotate90ccw.jpg';
-	let dstQuality = jpegFileManager.getDstImageQuality();
 
 	for (let i = 0; i < argv.length; i++) {
 		const arg = argv[i];
@@ -364,7 +343,8 @@ function dispatchRotate90DegreesCounterclockwise(argv: string[]): void {
 			i++;
 
 			if (arg === '-q') {
-				dstQuality = parseInt(nextArg);
+				const dstQuality = parseInt(nextArg, 10);
+
 				jpegFileManager.setDstImageQuality(dstQuality);
 			}
 		}
@@ -381,7 +361,6 @@ function dispatchRotate90DegreesCounterclockwise(argv: string[]): void {
 function dispatchRotate180Degrees(argv: string[]): void {
 	let srcFilePath = defaultSrcFilePath;
 	let dstFilePath = 'test/output-files/rotate180.jpg';
-	let dstQuality = jpegFileManager.getDstImageQuality();
 
 	for (let i = 0; i < argv.length; i++) {
 		const arg = argv[i];
@@ -397,7 +376,8 @@ function dispatchRotate180Degrees(argv: string[]): void {
 			i++;
 
 			if (arg === '-q') {
-				dstQuality = parseInt(nextArg);
+				const dstQuality = parseInt(nextArg, 10);
+
 				jpegFileManager.setDstImageQuality(dstQuality);
 			}
 		}

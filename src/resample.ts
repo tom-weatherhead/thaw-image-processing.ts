@@ -51,9 +51,15 @@ import {
 	ThAWImageBufferType
 } from './thawimage';
 
-export const modeNearestNeighbour = 0;
-export const modeBilinear = 1;
-export const modeBicubic = 2;
+// export const modeNearestNeighbour = 0;
+// export const modeBilinear = 1;
+// export const modeBicubic = 2;
+
+export enum ResamplingMode {
+	NearestNeighbour,
+	Bilinear,
+	Bicubic
+}
 
 function resample1DNearestNeighbour(
 	dstBuffer: ThAWImageBufferType,
@@ -319,38 +325,38 @@ function resample1DBicubic(
 }
 
 function get1DResamplingFunction(
-	mode: number
-):
-	| ((
-			dstBuffer: ThAWImageBufferType,
-			dstInitialOffset: number,
-			numDstPixels: number,
-			dstPixelStride: number,
-			srcBuffer: ThAWImageBufferType,
-			srcInitialOffset: number,
-			numSrcPixels: number,
-			srcPixelStride: number,
-			numBytesPerPixel: number
-	  ) => void) /* eslint-disable-line no-mixed-spaces-and-tabs */
-	| undefined {
+	mode: ResamplingMode
+): (
+	dstBuffer: ThAWImageBufferType,
+	dstInitialOffset: number,
+	numDstPixels: number,
+	dstPixelStride: number,
+	srcBuffer: ThAWImageBufferType,
+	srcInitialOffset: number,
+	numSrcPixels: number,
+	srcPixelStride: number,
+	numBytesPerPixel: number
+) => void {
 	switch (mode) {
-		case modeNearestNeighbour:
-			console.log('modeNearestNeighbour');
+		case ResamplingMode.NearestNeighbour:
+			// console.log('modeNearestNeighbour');
 
 			return resample1DNearestNeighbour;
 
-		case modeBilinear:
-			console.log('modeBilinear');
+		case ResamplingMode.Bilinear:
+			// console.log('modeBilinear');
 
 			return resample1DBilinear;
 
-		case modeBicubic:
-			console.log('resample1DBicubic');
+		case ResamplingMode.Bicubic:
+			// console.log('resample1DBicubic');
 
 			return resample1DBicubic;
 
 		default:
-			return undefined;
+			throw new Error(
+				`get1DResamplingFunction: Unsupported ResamplingMode '${mode}'`
+			);
 	}
 }
 
@@ -360,48 +366,40 @@ export function resampleImageFromBuffer(
 	dstHeight: number,
 	mode: number
 ): IThAWImage {
-	// , fnCreateImage
 	const fn1DResamplingFunction = get1DResamplingFunction(mode);
 
-	if (typeof fn1DResamplingFunction === 'undefined') {
-		// console.error('No resampling function for mode', mode);
+	// const numBytesPerPixel = 4; // Assume that the pixel format is RGBA.
+	const numBytesPerPixel = srcImage.bytesPerPixel;
 
-		// return undefined;
+	// const srcWidth = srcImage.width;
+	// const srcHeight = srcImage.height;
+	// const srcBytesPerLine = srcWidth * numBytesPerPixel;
+	// const srcBytesPerLine = srcImage.bytesPerLine;
+	// const srcBuffer = srcImage.data;
 
-		const message = `No resampling function for mode ${mode}`;
-
-		console.error(message);
-		throw new Error(message);
-	}
-
-	const numBytesPerPixel = 4; // Assume that the pixel format is RGBA.
-
-	const srcWidth = srcImage.width;
-	const srcHeight = srcImage.height;
-	const srcBytesPerLine = srcWidth * numBytesPerPixel;
-	const srcBuffer = srcImage.data;
-
-	const intermediateWidth = dstWidth;
-	const intermediateHeight = srcHeight;
-	const intermediateBytesPerLine = dstWidth * numBytesPerPixel;
-	const intermediateBuffer = createImageBuffer(
-		intermediateHeight * intermediateBytesPerLine
+	const intermediateImage = createThAWImage(
+		dstWidth,
+		srcImage.height,
+		numBytesPerPixel
 	);
-
-	const dstBytesPerLine = intermediateBytesPerLine;
-	const dstBuffer = createImageBuffer(dstHeight * dstBytesPerLine);
+	// const intermediateWidth = dstWidth;
+	// const intermediateHeight = srcHeight;
+	// const intermediateBytesPerLine = dstWidth * numBytesPerPixel;
+	// const intermediateBuffer = createImageBuffer(
+	// 	intermediateHeight * intermediateBytesPerLine
+	// );
 
 	// 1) Resample horizontally from srcBuffer to intermediateBuffer
 
-	for (let row = 0; row < srcHeight; row++) {
+	for (let row = 0; row < srcImage.height; row++) {
 		fn1DResamplingFunction(
-			intermediateBuffer,
-			row * intermediateBytesPerLine,
-			intermediateWidth,
+			intermediateImage.data,
+			row * intermediateImage.bytesPerLine,
+			intermediateImage.width,
 			numBytesPerPixel,
-			srcBuffer,
-			row * srcBytesPerLine,
-			srcWidth,
+			srcImage.data,
+			row * srcImage.bytesPerLine,
+			srcImage.width,
 			numBytesPerPixel,
 			numBytesPerPixel
 		);
@@ -409,33 +407,25 @@ export function resampleImageFromBuffer(
 
 	// 2) Resample vertically from intermediateBuffer to dstBuffer
 
-	for (let col = 0; col < intermediateWidth; col++) {
+	const dstImage = createThAWImage(dstWidth, dstHeight, numBytesPerPixel);
+	// const dstBytesPerLine = intermediateBytesPerLine;
+	// const dstBuffer = createImageBuffer(dstHeight * dstBytesPerLine);
+
+	for (let col = 0; col < intermediateImage.width; col++) {
 		fn1DResamplingFunction(
-			dstBuffer,
+			dstImage.data,
 			col * numBytesPerPixel,
 			dstHeight,
-			dstBytesPerLine,
-			intermediateBuffer,
+			dstImage.bytesPerLine,
+			intermediateImage.data,
 			col * numBytesPerPixel,
-			intermediateHeight,
-			intermediateBytesPerLine,
+			intermediateImage.height,
+			intermediateImage.bytesPerLine,
 			numBytesPerPixel
 		);
 	}
 
-	// return {
-	// 	width: dstWidth,
-	// 	height: dstHeight,
-	// 	data: dstBuffer,
-	// };
-
-	return createThAWImage(
-		dstWidth,
-		dstHeight,
-		numBytesPerPixel,
-		dstWidth * numBytesPerPixel,
-		dstBuffer
-	);
+	return dstImage;
 }
 
 // Stretching in context:
@@ -613,10 +603,3 @@ function resampleImageInContextFromBuffer(
 	};
 }
 */
-
-// module.exports = {
-// 	modeNearestNeighbour: modeNearestNeighbour,
-// 	modeBilinear: modeBilinear,
-// 	modeBicubic: modeBicubic,
-// 	resampleImageFromBuffer: resampleImageFromBuffer,
-// };
