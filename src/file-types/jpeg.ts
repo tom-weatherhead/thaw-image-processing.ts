@@ -3,12 +3,12 @@
 'use strict';
 
 // import { readFileSync, writeFileSync } from 'fs';
-import * as fs from 'fs';
+import * as fs from 'fs'; // Used only as a type, so Angular is OK.
 
 // import * as jpegJs from 'jpeg-js';
 import { decode, encode } from 'jpeg-js';
 
-// import { ifDefinedThenElse } from 'thaw-common-utilities.ts';
+import { isNonNegativeInteger } from 'thaw-common-utilities.ts';
 
 import { createThAWImage, IThAWImage } from '../thawimage';
 
@@ -34,9 +34,9 @@ export const defaultJpegQuality = 90;
 
 // 1a) Types
 
-interface IFileOptions {
-	quality?: number;
-}
+// interface IFileOptions {
+// 	quality?: number;
+// }
 
 interface IFileManager {
 	load(path: string): IThAWImage;
@@ -50,9 +50,22 @@ export interface IJpegFileManager extends IFileManager {
 
 // 1b) Code
 
+// From https://github.com/eugeneware/jpeg-js :
+
+// Decode Options
+
+// Option 	Description 	Default
+
+// colorTransform 	Transform alternate colorspaces like YCbCr. undefined means respect the default behavior encoded in metadata. 	undefined
+// useTArray 	Decode pixels into a typed Uint8Array instead of a Buffer. 	false
+// formatAsRGBA 	Decode pixels into RGBA vs. RGB. 	true
+// tolerantDecoding 	Be more tolerant when encountering technically invalid JPEGs. 	true
+// maxResolutionInMP 	The maximum resolution image that jpeg-js should attempt to decode in megapixels. Images larger than this resolution will throw an error instead of decoding. 	100
+// maxMemoryUsageInMB 	The (approximate) maximum memory that jpeg-js should allocate while attempting to decode the image in mebibyte. Images requiring more memory than this will throw an error instead of decoding. 	512
+
 function loadJpegFile(fsInjected: typeof fs, path: string): IThAWImage {
 	const srcJpegData = fsInjected.readFileSync(path);
-	const srcImage = decode(srcJpegData);
+	const srcImage = decode(srcJpegData, { useTArray: true });
 
 	return createThAWImage(
 		srcImage.width,
@@ -63,29 +76,45 @@ function loadJpegFile(fsInjected: typeof fs, path: string): IThAWImage {
 	);
 }
 
+function isLegalJpegImageQuality(n: number): boolean {
+	return isNonNegativeInteger(n) && n <= 100;
+}
+
+// function getLegalJpegImageQuality(n: number): number {
+// 	if (isLegalJpegImageQuality(n)) {
+// 		return n;
+// 	} else {
+// 		return defaultJpegQuality;
+// 	}
+// }
+
 function saveJpegFile(
 	fsInjected: typeof fs,
 	image: IThAWImage,
 	path: string,
-	options?: IFileOptions
-): void {
-	let quality = defaultJpegQuality;
-
-	if (
-		typeof options !== 'undefined' &&
-		typeof options.quality !== 'undefined'
-	) {
-		quality = options.quality;
+	// options?: IFileOptions
+	options: {
+		quality: number;
 	}
-	const dstJpegData = encode(image, quality);
+): void {
+	// let quality = defaultJpegQuality;
+
+	// if (
+	// 	typeof options !== 'undefined' &&
+	// 	typeof options.quality !== 'undefined'
+	// ) {
+	// 	quality = options.quality;
+	// }
+	const dstJpegData = encode(image, options.quality);
 
 	fsInjected.writeFileSync(path, dstJpegData.data);
 }
 
 export function createJpegFileManager(
-	fsInjected: typeof fs,
-	dstImageQuality = 90
+	fsInjected: typeof fs
 ): IJpegFileManager {
+	let dstImageQuality = defaultJpegQuality;
+
 	return {
 		load: (path: string) => loadJpegFile(fsInjected, path),
 		save: (image: IThAWImage, path: string) =>
@@ -94,69 +123,14 @@ export function createJpegFileManager(
 			}),
 		getDstImageQuality: () => dstImageQuality,
 		setDstImageQuality: (newDstImageQuality: number) => {
-			dstImageQuality = newDstImageQuality;
+			if (isLegalJpegImageQuality(newDstImageQuality)) {
+				dstImageQuality = newDstImageQuality;
+			}
 		}
 	};
 }
 
-// **** 2) ****
-
-// 2a) Types
-
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-// export interface IOperationOptions {
-// 	// quality?: number;
-// }
-
-// type ImageOperation = (
-// 	srcImage: IThAWImage,
-// 	operationOptions?: IOperationOptions
-// ) => IThAWImage;
-
-// type ImageOperationOnJpegFile = (
-// 	srcFilePath: string,
-// 	dstFilePath: string,
-// 	fileManager?: IFileManager,
-// 	operationOptions?: IOperationOptions,
-// 	fileOptions?: IFileOptions
-// ) => void;
-
-// 2b) Code
-
-// function doOperationOnImageFromFile(
-// 	srcFilePath: string,
-// 	dstFilePath: string,
-// 	operation: ImageOperation,
-// 	fileManager: IFileManager,
-// 	operationOptions?: IOperationOptions,
-// 	fileOptions?: IFileOptions
-// ): void {
-// 	const srcImage = fileManager.load(srcFilePath);
-// 	const dstImage = operation(srcImage, operationOptions);
-
-// 	fileManager.save(dstImage, dstFilePath, fileOptions);
-// }
-
-// function makeImageOperationOnJpegFile(
-// 	operation: ImageOperation
-// ): ImageOperationOnJpegFile {
-// 	return (
-// 		srcFilePath: string,
-// 		dstFilePath: string,
-// 		fileManager?: IFileManager,
-// 		operationOptions?: IOperationOptions,
-// 		fileOptions?: IFileOptions
-// 	) => {
-// 		doOperationOnImageFromFile(
-// 			srcFilePath,
-// 			dstFilePath,
-// 			operation,
-// 			ifDefinedThenElse(fileManager, createJpegFileManager()),
-// 			operationOptions,
-// 			fileOptions
-// 		);
-// 	};
-// }
+// **** Image Operations on JPEG Files ****
 
 export function compositeTestFromJpegFile(
 	fileManager: IFileManager,

@@ -1,7 +1,5 @@
 // thaw-image-utilities.ts/src/thawimage.ts
 
-'use strict';
-
 import {
 	ifDefinedThenElse,
 	isPositiveInteger

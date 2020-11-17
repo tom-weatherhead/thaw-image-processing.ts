@@ -1,7 +1,5 @@
 // thaw-image-processing.ts/src/sample-array-and-weight.ts
 
-'use strict';
-
 import Sample from './sample';
 
 export default class SampleArrayAndWeight {

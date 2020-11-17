@@ -1,8 +1,4 @@
-#!/usr/bin/env node
-
 // thaw-image-processing.ts/src/cli.ts
-
-'use strict';
 
 // E.g. : npm start -- -sc -w 235 -h 763 in.jpg out.jpg -q 34
 
@@ -153,7 +149,7 @@ function dispatchGaussianBlur(argv: string[]): void {
 	let sigma = 4.0;
 	// let kernelSize = 5; // kernelSize must be an odd positive integer smaller than 999.
 	let kernelSize = 21;
-	let dstQuality = engine.defaultJpegQuality;
+	let dstQuality = jpegFileManager.getDstImageQuality();
 
 	for (let i = 0; i < argv.length; i++) {
 		const arg = argv[i];
@@ -216,7 +212,7 @@ function dispatchPixelate(argv: string[]): void {
 	let dstFilePath = 'test/output-files/pixelate.jpg';
 	let pixelWidth = 8;
 	let pixelHeight = 8;
-	let dstQuality = engine.defaultJpegQuality;
+	let dstQuality = jpegFileManager.getDstImageQuality();
 
 	for (let i = 0; i < argv.length; i++) {
 		const arg = argv[i];
@@ -259,7 +255,7 @@ function dispatchResample(argv: string[]): void {
 	let dstFilePath = 'test/output-files/resample.jpg';
 	let dstWidth = 0;
 	let dstHeight = 0;
-	let dstQuality = engine.defaultJpegQuality;
+	let dstQuality = jpegFileManager.getDstImageQuality();
 	const defaultDstWidth = 640;
 	const defaultDstHeight = 480;
 	let mode = engine.modeBicubic;
@@ -319,7 +315,7 @@ function dispatchResample(argv: string[]): void {
 function dispatchRotate90DegreesClockwise(argv: string[]): void {
 	let srcFilePath = defaultSrcFilePath;
 	let dstFilePath = 'test/output-files/rotate90cw.jpg';
-	let dstQuality = engine.defaultJpegQuality;
+	let dstQuality = jpegFileManager.getDstImageQuality();
 
 	for (let i = 0; i < argv.length; i++) {
 		const arg = argv[i];
@@ -352,7 +348,7 @@ function dispatchRotate90DegreesClockwise(argv: string[]): void {
 function dispatchRotate90DegreesCounterclockwise(argv: string[]): void {
 	let srcFilePath = defaultSrcFilePath;
 	let dstFilePath = 'test/output-files/rotate90ccw.jpg';
-	let dstQuality = engine.defaultJpegQuality;
+	let dstQuality = jpegFileManager.getDstImageQuality();
 
 	for (let i = 0; i < argv.length; i++) {
 		const arg = argv[i];
@@ -385,7 +381,7 @@ function dispatchRotate90DegreesCounterclockwise(argv: string[]): void {
 function dispatchRotate180Degrees(argv: string[]): void {
 	let srcFilePath = defaultSrcFilePath;
 	let dstFilePath = 'test/output-files/rotate180.jpg';
-	let dstQuality = engine.defaultJpegQuality;
+	let dstQuality = jpegFileManager.getDstImageQuality();
 
 	for (let i = 0; i < argv.length; i++) {
 		const arg = argv[i];

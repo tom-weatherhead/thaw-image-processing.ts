@@ -4,8 +4,6 @@
 
 // See also https://en.wikipedia.org/wiki/Gaussian_blur
 
-'use strict';
-
 import Sample from './sample';
 import SampleArrayAndWeight from './sample-array-and-weight';
 

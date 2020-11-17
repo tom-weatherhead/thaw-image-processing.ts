@@ -1,7 +1,5 @@
 // thaw-image-processing.ts/src/rotate.ts
 
-'use strict';
-
 import { mapImageByCoordinatesFromBuffer } from './map-coordinates';
 import { createThAWImage, IThAWImage } from './thawimage';
 

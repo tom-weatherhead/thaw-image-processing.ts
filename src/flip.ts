@@ -1,7 +1,5 @@
 // thaw-image-processing.ts/src/flip.ts
 
-'use strict';
-
 // import { IOperationOptions } from './file-types/jpeg';
 
 import {

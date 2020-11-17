@@ -9,8 +9,6 @@
 // srcX = dstX * a + dstY * b + c
 // srcY = dstX * d + dstY * e + f
 
-'use strict';
-
 import { ifDefinedThenElse } from 'thaw-common-utilities.ts';
 
 import { IThAWImage } from './thawimage';

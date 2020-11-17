@@ -2,8 +2,6 @@
 
 /* eslint-disable no-fallthrough */
 
-'use strict';
-
 import { createThAWImage, IThAWImage } from './thawimage';
 
 export function pixelateImageFromBuffer(

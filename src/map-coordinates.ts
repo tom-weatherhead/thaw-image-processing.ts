@@ -2,8 +2,6 @@
 
 /* eslint-disable no-fallthrough */
 
-'use strict';
-
 import { ThAWImageBufferType } from './thawimage';
 
 export type CoordinatesMapperType = (

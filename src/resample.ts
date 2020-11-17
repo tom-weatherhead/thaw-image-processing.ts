@@ -44,8 +44,6 @@
 
 /* eslint-disable no-fallthrough */
 
-'use strict';
-
 import {
 	createImageBuffer,
 	createThAWImage,

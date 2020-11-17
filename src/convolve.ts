@@ -2,9 +2,6 @@
 
 /* eslint-disable no-fallthrough */
 
-'use strict';
-
-// const gaussianBlurEngine = require('./gaussian-blur.js');
 import { generateKernel } from './gaussian-blur';
 import {
 	createThAWImage,
