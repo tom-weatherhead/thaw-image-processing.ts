@@ -161,7 +161,7 @@ function dispatchGaussianBlur(argv: string[]): void {
 	}
 
 	console.log('Gaussian blur.');
-	engine.convolveImageFromJpegFile(
+	engine.gaussianBlurImageFromJpegFile(
 		jpegFileManager,
 		srcFilePath,
 		dstFilePath,

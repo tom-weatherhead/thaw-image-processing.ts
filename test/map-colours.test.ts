@@ -1,16 +1,22 @@
 // thaw-image-processing.ts/test/map-colours.test.ts
 
-'use strict';
+import {
+	createThAWImage,
+	desaturateRGBA,
+	mapColoursInImageFromBuffer
+} from '..';
 
-// import * as engine from '../lib/main';
-
-test('max', () => {
+test('desaturateRGBA', () => {
 	// Arrange
-	const expectedValue = 0;
+	// const expectedValue = 0;
+	const width = 320;
+	const height = 200;
+	const srcImage = createThAWImage(width, height);
 
 	// Act
-	const actualValue = 0; //engine.max([8, 6, 9, 5, 3, 0, 7]);
+	const dstImage = mapColoursInImageFromBuffer(srcImage, desaturateRGBA);
 
 	// Assert
-	expect(actualValue).toEqual(expectedValue);
+	// expect(actualValue).toEqual(expectedValue);
+	expect(dstImage).toBeTruthy();
 });

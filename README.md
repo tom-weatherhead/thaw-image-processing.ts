@@ -38,7 +38,30 @@ npm install --save thaw-image-processing.ts
 
 ## API Information
 
-Foo
+```
+interface IThAWImage extends ImageData { ... }
+
+function createThAWImage(
+	width: number,
+	height: number,
+	bytesPerPixel?: number,
+	bytesPerLine?: number,
+	data?: Uint8ClampedArray
+): IThAWImage { ... }
+```
+
+- compositeImageFromBuffers()
+- convolveImageFromBuffer()
+- desaturateRGBA() (via mapColoursInImageFromBuffer)
+- flipImage() (via doAffineTransformation())
+- Gaussian Blur
+- mapColoursInImageFromBuffer()
+- mirrorImage() (via doAffineTransformation())
+- pixelateImageFromBuffer()
+- resampleImageFromBuffer() (nearest neighbour, bilinear, and bicubic)
+- rotate180DegreesFromImage()
+- rotate90DegreesClockwiseFromImage()
+- rotate90DegreesCounterclockwiseFromImage()
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)

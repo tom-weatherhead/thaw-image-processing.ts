@@ -1,11 +1,7 @@
 // thaw-image-processing.ts/src/file-types/jpeg.ts
 
-'use strict';
-
-// import { readFileSync, writeFileSync } from 'fs';
 import * as fs from 'fs'; // Used only as a type, so Angular is OK.
 
-// import * as jpegJs from 'jpeg-js';
 import { decode, encode } from 'jpeg-js';
 
 import { isNonNegativeInteger } from 'thaw-common-utilities.ts';
@@ -13,15 +9,15 @@ import { isNonNegativeInteger } from 'thaw-common-utilities.ts';
 import { createThAWImage, IThAWImage } from '../thawimage';
 
 import { compositeTest } from '../composite';
-import { convolveImageFromBuffer } from '../convolve';
 import { flipImage } from '../flip';
+import { gaussianBlurImage } from '../gaussian-blur';
 import {
 	ColourMapperType,
 	mapColoursInImageFromBuffer
 } from '../map-colours';
 import { mirrorImage } from '../mirror';
 import { pixelateImageFromBuffer } from '../pixelate';
-import { resampleImageFromBuffer } from '../resample';
+import { resampleImageFromBuffer, ResamplingMode } from '../resample';
 import {
 	rotate180DegreesFromImage,
 	rotate90DegreesClockwiseFromImage,
@@ -143,19 +139,6 @@ export function compositeTestFromJpegFile(
 	fileManager.save(dstImage, dstFilePath);
 }
 
-export function convolveImageFromJpegFile(
-	fileManager: IFileManager,
-	srcFilePath: string,
-	dstFilePath: string,
-	sigma: number,
-	kernelSize: number
-): void {
-	const srcImage = fileManager.load(srcFilePath);
-	const dstImage = convolveImageFromBuffer(srcImage, sigma, kernelSize);
-
-	fileManager.save(dstImage, dstFilePath);
-}
-
 export function flipImageFromJpegFile(
 	fileManager: IFileManager,
 	srcFilePath: string,
@@ -163,6 +146,19 @@ export function flipImageFromJpegFile(
 ): void {
 	const srcImage = fileManager.load(srcFilePath);
 	const dstImage = flipImage(srcImage);
+
+	fileManager.save(dstImage, dstFilePath);
+}
+
+export function gaussianBlurImageFromJpegFile(
+	fileManager: IFileManager,
+	srcFilePath: string,
+	dstFilePath: string,
+	sigma: number,
+	kernelSize: number
+): void {
+	const srcImage = fileManager.load(srcFilePath);
+	const dstImage = gaussianBlurImage(srcImage, sigma, kernelSize);
 
 	fileManager.save(dstImage, dstFilePath);
 }
@@ -211,7 +207,7 @@ export function resampleImageFromJpegFile(
 	dstFilePath: string,
 	dstWidth: number,
 	dstHeight: number,
-	mode: number
+	mode: ResamplingMode
 ): void {
 	const srcImage = fileManager.load(srcFilePath);
 	const dstImage = resampleImageFromBuffer(

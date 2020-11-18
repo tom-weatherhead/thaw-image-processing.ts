@@ -9,11 +9,7 @@ import {
 
 import { createThAWImage, IThAWImage } from './thawimage';
 
-export function mirrorImage(
-	srcImage: IThAWImage // ,
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	// operationOptions?: IOperationOptions
-): IThAWImage {
+export function mirrorImage(srcImage: IThAWImage): IThAWImage {
 	const dstImage = createThAWImage(
 		srcImage.width,
 		srcImage.height,

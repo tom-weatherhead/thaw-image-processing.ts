@@ -1,8 +1,6 @@
 // thaw-image-utilities.ts/test/thawimage.test.ts
 
-'use strict';
-
-import * as engine from '../lib/main';
+import { createThAWImage } from '../lib/main';
 
 test('Create image', () => {
 	// Arrange
@@ -11,10 +9,9 @@ test('Create image', () => {
 	const bytesPerPixel = 4;
 
 	// Act
-	const image = engine.createThAWImage(width, height, bytesPerPixel);
+	const image = createThAWImage(width, height, bytesPerPixel);
 
 	// Assert
-	// expect(actualValue).toEqual(expectedValue);
 	expect(image).toBeTruthy();
 	expect(image.width).toEqual(width);
 	expect(image.height).toEqual(height);
@@ -23,15 +20,12 @@ test('Create image', () => {
 
 test('Fill image', () => {
 	// Arrange
-	// const expectedValue: number = 0;
 	const width = 40;
 	const height = 25;
-	// const bytesPerPixel = 4;
 	const srcColour: number[] = [64, 128, 192, 255];
 
 	// Act
-	// const actualValue: number = 0; //engine.max([8, 6, 9, 5, 3, 0, 7]);
-	const image = engine.createThAWImage(width, height);
+	const image = createThAWImage(width, height);
 
 	image.fill(0, 0, image.width, image.height, srcColour);
 
@@ -41,11 +35,9 @@ test('Fill image', () => {
 	);
 
 	// Assert
-	// expect(actualValue).toEqual(expectedValue);
 	expect(image).toBeTruthy();
 	expect(image.width).toEqual(width);
 	expect(image.height).toEqual(height);
-	// expect(image.bytesPerPixel).toEqual(bytesPerPixel);
 	expect(sampledColour).toStrictEqual(srcColour); // We use .toStrictEqual() because we want a deep comparison of the two arrays.
 });
 

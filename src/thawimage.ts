@@ -70,6 +70,19 @@ class ThAWImage implements IThAWImage {
 	public readonly bytesPerLine: number;
 	public readonly colourModel = ColourModel.RGBA32;
 
+	// constructor(
+	// 	width: number,
+	// 	height: number,
+	// 	options: {
+	// 		bytesPerPixel?: number;
+	// 		bytesPerLine?: number;
+	// 		colourModel?: ColourModel;
+	// 		data?: ThAWImageBufferType;
+	// 	} = {}
+	// ) {
+	// 	...
+	// }
+
 	constructor(
 		width: number,
 		height: number,
@@ -207,3 +220,20 @@ export function createThAWImage(
 		/* colourModel, */ data
 	);
 }
+
+// export function createThAWImage(
+// 	width: number,
+// 	height: number,
+// 	options: {
+// 		bytesPerPixel?: number;
+// 		bytesPerLine?: number;
+// 		colourModel?: ColourModel;
+// 		data?: ThAWImageBufferType;
+// 	} = {}
+// ): IThAWImage {
+// 	return new ThAWImage(
+// 		width,
+// 		height,
+// 		options
+// 	);
+// }

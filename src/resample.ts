@@ -44,6 +44,8 @@
 
 /* eslint-disable no-fallthrough */
 
+// ThAW 2020-11-17 : BUG in bicubic upsampling? Investigate.
+
 import {
 	createImageBuffer,
 	createThAWImage,

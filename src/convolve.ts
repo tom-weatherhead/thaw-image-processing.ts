@@ -2,7 +2,7 @@
 
 /* eslint-disable no-fallthrough */
 
-import { generateKernel } from './gaussian-blur';
+// import { generateKernel } from './gaussian-blur';
 import {
 	createThAWImage,
 	IThAWImage,
@@ -120,16 +120,16 @@ function convolve1D(
 
 export function convolveImageFromBuffer(
 	srcImage: IThAWImage,
-	sigma: number,
-	kernelSize: number /*, fnCreateImage */
+	kernel: number[]
+	// sigma: number,
+	// kernelSize: number /*, fnCreateImage */
 ): IThAWImage {
-	const kernel = generateKernel(sigma, kernelSize);
-	const bytesPerPixel = 4; // Assume that the pixel format is RGBA.
-
+	// const kernel = generateKernel(sigma, kernelSize);
+	const bytesPerPixel = srcImage.bytesPerPixel;
 	const width = srcImage.width;
 	const height = srcImage.height;
 	// TODO: Use srcBytesPerLine, intermediateBytesPerLine, and dstBytesPerLine instead of bytesPerLine
-	const bytesPerLine = width * bytesPerPixel;
+	const bytesPerLine = srcImage.bytesPerLine;
 	const srcBuffer = srcImage.data;
 
 	const intermediateImage = createThAWImage(width, height, bytesPerPixel);
@@ -139,6 +139,9 @@ export function convolveImageFromBuffer(
 	const dstBuffer = dstImage.data;
 
 	const kernelOffset = Math.trunc(kernel.length / 2);
+
+	// Separable convolution: First apply it horizontally, then
+	// apply it vertically.
 
 	// 1) Convolve horizontally from srcBuffer to intermediateBuffer
 
@@ -178,35 +181,3 @@ export function convolveImageFromBuffer(
 
 	return dstImage;
 }
-
-/*
-// function driver(sigma, kernelSize) {
-function driver() {
-	const sigma = 1.0;
-	const kernelSize  =5;
-	const kernel = generateKernel(sigma, kernelSize);
-
-	// console.log(`driver(${sigma}, ${kernelSize}) = [${generateKernel(sigma, kernelSize).join(', ')}]`);
-	console.log(`driver(${sigma}, ${kernelSize}) = ${kernel}]`);
-
-	const srcFilePath = 'test/images/unconventional-table.jpg';
-	const srcJpegData = fs.readFileSync(srcFilePath);
-	const srcImage = jpeg.decode(srcJpegData);
-	const dstImage = convolveImageFromBuffer(srcImage, kernel);
-
-	if (dstImage) {
-		const dstFilePath = 'gaussian-blur.jpg';
-		const dstQuality = 50;
-		const dstJpegData = jpeg.encode(dstImage, dstQuality);
-
-		fs.writeFileSync(dstFilePath, dstJpegData.data);
-	}
-}
-
-// driver(1.0, 5);
-driver();
-*/
-
-// module.exports = {
-// 	convolveImageFromBuffer: convolveImageFromBuffer
-// };

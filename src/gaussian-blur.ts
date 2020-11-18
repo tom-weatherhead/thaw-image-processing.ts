@@ -4,18 +4,12 @@
 
 // See also https://en.wikipedia.org/wiki/Gaussian_blur
 
+import { IThAWImage } from './thawimage';
+
+import { convolveImageFromBuffer } from './convolve';
+
 import Sample from './sample';
 import SampleArrayAndWeight from './sample-array-and-weight';
-
-// class Interval {
-// 	public begin: number;
-// 	public end: number;
-
-// 	constructor (b: number, e: number) {
-// 		this.begin = b;
-// 		this.end = e;
-// 	}
-// };
 
 function gaussianDistribution(x: number, mu: number, sigma: number): number {
 	const d = x - mu;
@@ -119,18 +113,6 @@ export function generateKernel(sigma: number, kernelSize: number): number[] {
 
 	// Renormalize the kernel and round its entries to 6 decimal places.
 
-	/*
-	for (var i = 0; i < allSamples.length; ++i) {
-		allSamples[i][1] = roundTo6DecimalPlaces(allSamples[i][1] / weightSum);
-	}
-
-	let result = [];
-
-	for (var i = 1; i < allSamples.length - 1; ++i) {
-		result.push(roundTo6DecimalPlaces(allSamples[i][1]));
-	}
-	*/
-
 	const result = [];
 
 	for (let i = 1; i < allSamples.length - 1; ++i) {
@@ -140,11 +122,12 @@ export function generateKernel(sigma: number, kernelSize: number): number[] {
 	return result;
 }
 
-// function driver(sigma, kernelSize) {
-// 		console.log(`driver(${sigma}, ${kernelSize}) = [${generateKernel(sigma, kernelSize).join(', ')}]`);
-// }
+export function gaussianBlurImage(
+	srcImage: IThAWImage,
+	sigma: number,
+	kernelSize: number
+): IThAWImage {
+	const kernel = generateKernel(sigma, kernelSize);
 
-// driver(1.0, 5);
-// driver(2.0, 5);
-// driver(1.0, 7);
-// driver(2.0, 7);
+	return convolveImageFromBuffer(srcImage, kernel);
+}
