@@ -52,7 +52,7 @@ function createThAWImage(
 
 - compositeImageFromBuffers()
 - convolveImageFromBuffer()
-- desaturateRGBA() (via mapColoursInImageFromBuffer)
+- desaturateRGBA() (via mapColoursInImageFromBuffer())
 - flipImage() (via doAffineTransformation())
 - Gaussian Blur
 - mapColoursInImageFromBuffer()
