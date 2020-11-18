@@ -47,15 +47,10 @@
 // ThAW 2020-11-17 : BUG in bicubic upsampling? Investigate.
 
 import {
-	createImageBuffer,
 	createThAWImage,
 	IThAWImage,
 	ThAWImageBufferType
 } from './thawimage';
-
-// export const modeNearestNeighbour = 0;
-// export const modeBilinear = 1;
-// export const modeBicubic = 2;
 
 export enum ResamplingMode {
 	NearestNeighbour,
@@ -89,15 +84,14 @@ function resample1DNearestNeighbour(
 			case 4:
 				dstBuffer[dstInitialOffset + 3] =
 					srcBuffer[srcPixelIndex + 3];
-			case 3: // eslint-disable-line
+			case 3:
 				dstBuffer[dstInitialOffset + 2] =
 					srcBuffer[srcPixelIndex + 2];
 				dstBuffer[dstInitialOffset + 1] =
 					srcBuffer[srcPixelIndex + 1];
-			case 1: // eslint-disable-line
+			case 1:
 				dstBuffer[dstInitialOffset] = srcBuffer[srcPixelIndex];
 			default:
-				// eslint-disable-line
 				break;
 		}
 
@@ -133,15 +127,14 @@ function resample1DBilinear(
 				case 4:
 					dstBuffer[dstInitialOffset + 3] =
 						srcBuffer[srcPixelIndex + 3];
-				case 3: // eslint-disable-line
+				case 3:
 					dstBuffer[dstInitialOffset + 2] =
 						srcBuffer[srcPixelIndex + 2];
 					dstBuffer[dstInitialOffset + 1] =
 						srcBuffer[srcPixelIndex + 1];
-				case 1: // eslint-disable-line
+				case 1:
 					dstBuffer[dstInitialOffset] = srcBuffer[srcPixelIndex];
 				default:
-					// eslint-disable-line
 					break;
 			}
 		} else {
@@ -157,7 +150,7 @@ function resample1DBilinear(
 						(srcBuffer[srcPixelIndex + 3] * weight1 +
 							srcBuffer[srcPixelIndex2 + 3] * weight2) /
 						numDstPixels;
-				case 3: // eslint-disable-line
+				case 3:
 					dstBuffer[dstInitialOffset + 2] =
 						(srcBuffer[srcPixelIndex + 2] * weight1 +
 							srcBuffer[srcPixelIndex2 + 2] * weight2) /
@@ -166,13 +159,12 @@ function resample1DBilinear(
 						(srcBuffer[srcPixelIndex + 1] * weight1 +
 							srcBuffer[srcPixelIndex2 + 1] * weight2) /
 						numDstPixels;
-				case 1: // eslint-disable-line
+				case 1:
 					dstBuffer[dstInitialOffset] =
 						(srcBuffer[srcPixelIndex] * weight1 +
 							srcBuffer[srcPixelIndex2] * weight2) /
 						numDstPixels;
 				default:
-					// eslint-disable-line
 					break;
 			}
 		}
@@ -269,19 +261,18 @@ function resample1DBicubic(
 					accumulator3 +=
 						srcBuffer[srcPixelOffsetInBuffer + 3] *
 						srcPixelWeight;
-				case 3: // eslint-disable-line
+				case 3:
 					accumulator2 +=
 						srcBuffer[srcPixelOffsetInBuffer + 2] *
 						srcPixelWeight;
 					accumulator1 +=
 						srcBuffer[srcPixelOffsetInBuffer + 1] *
 						srcPixelWeight;
-				case 1: // eslint-disable-line
+				case 1:
 					accumulator0 +=
 						srcBuffer[srcPixelOffsetInBuffer + 0] *
 						srcPixelWeight;
 				default:
-					// eslint-disable-line
 					break;
 			}
 
@@ -294,29 +285,27 @@ function resample1DBicubic(
 				case 4:
 					dstBuffer[dstPixelOffsetInBuffer + 3] =
 						accumulator3 / totalWeight; // Or * inverseOfTotalWeight;
-				case 3: // eslint-disable-line
+				case 3:
 					dstBuffer[dstPixelOffsetInBuffer + 2] =
 						accumulator2 / totalWeight;
 					dstBuffer[dstPixelOffsetInBuffer + 1] =
 						accumulator1 / totalWeight;
-				case 1: // eslint-disable-line
+				case 1:
 					dstBuffer[dstPixelOffsetInBuffer + 0] =
 						accumulator0 / totalWeight;
 				default:
-					// eslint-disable-line
 					break;
 			}
 		} else {
 			switch (numBytesPerPixel) {
 				case 4:
 					dstBuffer[dstPixelOffsetInBuffer + 3] = 0;
-				case 3: // eslint-disable-line
+				case 3:
 					dstBuffer[dstPixelOffsetInBuffer + 2] = 0;
 					dstBuffer[dstPixelOffsetInBuffer + 1] = 0;
-				case 1: // eslint-disable-line
+				case 1:
 					dstBuffer[dstPixelOffsetInBuffer + 0] = 0;
 				default:
-					// eslint-disable-line
 					break;
 			}
 		}
@@ -341,18 +330,12 @@ function get1DResamplingFunction(
 ) => void {
 	switch (mode) {
 		case ResamplingMode.NearestNeighbour:
-			// console.log('modeNearestNeighbour');
-
 			return resample1DNearestNeighbour;
 
 		case ResamplingMode.Bilinear:
-			// console.log('modeBilinear');
-
 			return resample1DBilinear;
 
 		case ResamplingMode.Bicubic:
-			// console.log('resample1DBicubic');
-
 			return resample1DBicubic;
 
 		default:
@@ -370,26 +353,13 @@ export function resampleImageFromBuffer(
 ): IThAWImage {
 	const fn1DResamplingFunction = get1DResamplingFunction(mode);
 
-	// const numBytesPerPixel = 4; // Assume that the pixel format is RGBA.
 	const numBytesPerPixel = srcImage.bytesPerPixel;
-
-	// const srcWidth = srcImage.width;
-	// const srcHeight = srcImage.height;
-	// const srcBytesPerLine = srcWidth * numBytesPerPixel;
-	// const srcBytesPerLine = srcImage.bytesPerLine;
-	// const srcBuffer = srcImage.data;
 
 	const intermediateImage = createThAWImage(
 		dstWidth,
 		srcImage.height,
 		numBytesPerPixel
 	);
-	// const intermediateWidth = dstWidth;
-	// const intermediateHeight = srcHeight;
-	// const intermediateBytesPerLine = dstWidth * numBytesPerPixel;
-	// const intermediateBuffer = createImageBuffer(
-	// 	intermediateHeight * intermediateBytesPerLine
-	// );
 
 	// 1) Resample horizontally from srcBuffer to intermediateBuffer
 
@@ -410,8 +380,6 @@ export function resampleImageFromBuffer(
 	// 2) Resample vertically from intermediateBuffer to dstBuffer
 
 	const dstImage = createThAWImage(dstWidth, dstHeight, numBytesPerPixel);
-	// const dstBytesPerLine = intermediateBytesPerLine;
-	// const dstBuffer = createImageBuffer(dstHeight * dstBytesPerLine);
 
 	for (let col = 0; col < intermediateImage.width; col++) {
 		fn1DResamplingFunction(

@@ -53,6 +53,7 @@
 		"clean-online": "npm run clean-offline && rm -rf node_modules && rm -f package-lock.json",
 		"build-and-test": "npm run prettier-check && npm run lint && npm run build && npm test",
 		"prettier-check": "prettier --check \"./*.js\" \"src/**/*.ts\" \"test/**/*.ts\"",
+		"prettier-check-windows": "prettier --check \"src/*.ts\" \"",
 		"prettier-list": "prettier --list-different \"./*.js\" \"src/**/*.ts\" \"test/**/*.ts\"",
 		"prettier-format": "prettier --write \"./*.js\" \"src/**/*.ts\" \"test/**/*.ts\"",
 		"lint": "eslint . --ext .js --ext .ts",
