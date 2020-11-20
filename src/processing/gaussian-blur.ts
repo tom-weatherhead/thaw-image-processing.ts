@@ -4,12 +4,12 @@
 
 // See also https://en.wikipedia.org/wiki/Gaussian_blur
 
-import { IThAWImage } from './thawimage';
+import { IThAWImage } from '../util/image';
 
-import { convolveImageFromBuffer } from './convolve';
+import { convolveImageFromBuffer } from '../util/convolve';
 
-import Sample from './sample';
-import SampleArrayAndWeight from './sample-array-and-weight';
+import Sample from '../util/sample';
+import SampleArrayAndWeight from '../util/sample-array-and-weight';
 
 function gaussianDistribution(x: number, mu: number, sigma: number): number {
 	const d = x - mu;

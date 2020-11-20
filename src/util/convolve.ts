@@ -3,11 +3,7 @@
 /* eslint-disable no-fallthrough */
 
 // import { generateKernel } from './gaussian-blur';
-import {
-	createThAWImage,
-	IThAWImage,
-	ThAWImageBufferType
-} from './thawimage';
+import { createThAWImage, IThAWImage, ThAWImageBufferType } from './image';
 
 function convolve1D(
 	dstBuffer: ThAWImageBufferType,

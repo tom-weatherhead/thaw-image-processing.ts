@@ -4,7 +4,7 @@ import * as fs from 'fs'; // Used only as a type, so Angular is OK.
 
 import { decode, encode } from '@vivaxy/png';
 
-import { createThAWImage, IThAWImage } from '../thawimage';
+import { createThAWImage, IThAWImage } from '../util/image';
 
 import { IFileManager } from './jpeg';
 
@@ -12,7 +12,7 @@ import {
 	// rotate180DegreesFromImage,
 	rotate90DegreesClockwiseFromImage // ,
 	// rotate90DegreesCounterclockwiseFromImage
-} from '../rotate';
+} from '../processing/rotate';
 
 // enum COLOR_TYPES {
 //   GRAYSCALE = 0,

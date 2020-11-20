@@ -11,7 +11,7 @@
 
 import { ifDefinedThenElse } from 'thaw-common-utilities.ts';
 
-import { IThAWImage } from './thawimage';
+import { IThAWImage } from '../util/image';
 
 export interface IAffineTransformationMatrix {
 	a: number;

@@ -14,9 +14,11 @@ import * as engine from '..';
 const jpegFileManager = engine.createJpegFileManager(fs);
 const pngFileManager = engine.createPngFileManager(fs);
 
+const fileManager = engine.createFileIOManager(fs);
+
 // //const defaultSrcFilePath = 'test/input-files/unconventional-table.jpg';
-const defaultSrcFilePath = 'test/input-files/fast-and-fourier.jpg';
-const defaultPngSrcFilePath =
+// const defaultSrcFilePath = 'test/input-files/fast-and-fourier.jpg';
+const defaultSrcFilePath =
 	'test/input-files/Vermeer-Girl_with_Pearl_Earring1665_716x1024.png';
 
 // // The option -q (JPEG export quality) is common to all operations; its value must be an integer in the range [0, 100].
@@ -297,9 +299,11 @@ function dispatchResample(argv: string[]): void {
 	);
 }
 
-function dispatchRotate90DegreesClockwise(argv: string[]): void {
+// function dispatchRotate90DegreesClockwise(argv: string[]): void {
+async function dispatchRotate90DegreesClockwise(argv: string[]): Promise<void> {
 	let srcFilePath = defaultSrcFilePath;
-	let dstFilePath = 'test/output-files/rotate90cw.jpg';
+	// let dstFilePath = 'test/output-files/rotate90cw.jpg';
+	let dstFilePath = 'test/output-files/rotate90cw.png';
 
 	for (let i = 0; i < argv.length; i++) {
 		const arg = argv[i];
@@ -323,11 +327,11 @@ function dispatchRotate90DegreesClockwise(argv: string[]): void {
 	}
 
 	console.log('Rotate 90 degrees clockwise.');
-	engine.rotate90DegreesClockwiseFromJpegFile(
-		jpegFileManager,
-		srcFilePath,
-		dstFilePath
-	);
+
+	const srcImage = await fileManager.load(srcFilePath);
+	const dstImage = engine.rotate90DegreesClockwiseFromImage(srcImage);
+
+	await fileManager.save(dstImage, dstFilePath);
 }
 
 function dispatchRotate90DegreesCounterclockwise(argv: string[]): void {
@@ -398,38 +402,38 @@ function dispatchRotate180Degrees(argv: string[]): void {
 
 // **** PNG ****
 
-function dispatchRotate90DegreesClockwisePng(argv: string[]): void {
-	let srcFilePath = defaultPngSrcFilePath;
-	let dstFilePath = 'test/output-files/rotate90cw.png';
+// function dispatchRotate90DegreesClockwisePng(argv: string[]): void {
+// 	let srcFilePath = defaultPngSrcFilePath;
+// 	let dstFilePath = 'test/output-files/rotate90cw.png';
 
-	for (let i = 0; i < argv.length; i++) {
-		const arg = argv[i];
+// 	for (let i = 0; i < argv.length; i++) {
+// 		const arg = argv[i];
 
-		if (arg.substr(0, 1) !== '-') {
-			if (!srcFilePath) {
-				srcFilePath = arg;
-			} else if (!dstFilePath) {
-				dstFilePath = arg;
-			}
-		} else if (i < argv.length - 1) {
-			const nextArg = argv[i + 1];
-			i++;
+// 		if (arg.substr(0, 1) !== '-') {
+// 			if (!srcFilePath) {
+// 				srcFilePath = arg;
+// 			} else if (!dstFilePath) {
+// 				dstFilePath = arg;
+// 			}
+// 		} else if (i < argv.length - 1) {
+// 			const nextArg = argv[i + 1];
+// 			i++;
 
-			// if (arg === '-q') {
-			// 	const dstQuality = parseInt(nextArg, 10);
+// 			// if (arg === '-q') {
+// 			// 	const dstQuality = parseInt(nextArg, 10);
 
-			// 	jpegFileManager.setDstImageQuality(dstQuality);
-			// }
-		}
-	}
+// 			// 	jpegFileManager.setDstImageQuality(dstQuality);
+// 			// }
+// 		}
+// 	}
 
-	console.log('Rotate 90 degrees clockwise.');
-	engine.rotate90DegreesClockwiseFromPngFile(
-		pngFileManager,
-		srcFilePath,
-		dstFilePath
-	);
-}
+// 	console.log('Rotate 90 degrees clockwise.');
+// 	engine.rotate90DegreesClockwiseFromPngFile(
+// 		pngFileManager,
+// 		srcFilePath,
+// 		dstFilePath
+// 	);
+// }
 
 function dispatch(argv: string[]): void {
 	const command = argv.shift();
@@ -470,7 +474,14 @@ function dispatch(argv: string[]): void {
 			break;
 
 		case 'r90cw':
-			dispatchRotate90DegreesClockwise(argv);
+			// dispatchRotate90DegreesClockwise(argv);
+			dispatchRotate90DegreesClockwise(argv)
+				.then(() => {
+					console.log('dispatchRotate90DegreesClockwise() : Success');
+				})
+				.catch((error) => {
+					console.error('dispatchRotate90DegreesClockwise() : Error:', typeof error, error);
+				});
 			break;
 
 		case 'r180':
@@ -479,9 +490,9 @@ function dispatch(argv: string[]): void {
 
 		// **** PNG ****
 
-		case 'r90cw_p':
-			dispatchRotate90DegreesClockwisePng(argv);
-			break;
+		// case 'r90cw_p':
+		// 	dispatchRotate90DegreesClockwisePng(argv);
+		// 	break;
 
 		default:
 			console.error('Unrecognized command:', command);

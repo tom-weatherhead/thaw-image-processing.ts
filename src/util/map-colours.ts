@@ -1,6 +1,6 @@
 // thaw-image-processing.ts/src/map-colours.ts
 
-import { IThAWImage, ThAWImageBufferType } from './thawimage';
+import { IThAWImage, ThAWImageBufferType } from './image';
 
 export type ColourMapperType = (
 	buffer: ThAWImageBufferType,

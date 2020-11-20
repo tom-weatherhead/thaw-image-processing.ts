@@ -50,7 +50,7 @@ import {
 	createThAWImage,
 	IThAWImage,
 	ThAWImageBufferType
-} from './thawimage';
+} from '../util/image';
 
 export enum ResamplingMode {
 	NearestNeighbour,

@@ -2,11 +2,7 @@
 
 /* eslint-disable no-fallthrough */
 
-import {
-	createThAWImage,
-	IThAWImage,
-	ThAWImageBufferType
-} from './thawimage';
+import { createThAWImage, IThAWImage, ThAWImageBufferType } from './image';
 
 // typedef CreateImage(width: number, height: number, bytesPerPixel: number, bytesPerLine: number, data: Buffer): IThAWImage;
 

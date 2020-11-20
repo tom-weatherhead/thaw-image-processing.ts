@@ -7,7 +7,7 @@ import {
 	doAffineTransformation
 } from './affine';
 
-import { createThAWImage, IThAWImage } from './thawimage';
+import { createThAWImage, IThAWImage } from '../util/image';
 
 export function flipImage(srcImage: IThAWImage): IThAWImage {
 	const dstImage = createThAWImage(

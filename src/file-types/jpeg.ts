@@ -6,24 +6,27 @@ import { decode, encode } from 'jpeg-js';
 
 import { isNonNegativeInteger } from 'thaw-common-utilities.ts';
 
-import { createThAWImage, IThAWImage } from '../thawimage';
+import { createThAWImage, IThAWImage } from '../util/image';
 
-import { compositeTest } from '../composite';
-import { desaturateImage } from '../desaturate';
-import { flipImage } from '../flip';
-import { gaussianBlurImage } from '../gaussian-blur';
+import { compositeTest } from '../util/composite';
+import { desaturateImage } from '../processing/desaturate';
+import { flipImage } from '../processing/flip';
+import { gaussianBlurImage } from '../processing/gaussian-blur';
 import {
 	ColourMapperType,
 	mapColoursInImageFromBuffer
-} from '../map-colours';
-import { mirrorImage } from '../mirror';
-import { pixelateImageFromBuffer } from '../pixelate';
-import { resampleImageFromBuffer, ResamplingMode } from '../resample';
+} from '../util/map-colours';
+import { mirrorImage } from '../processing/mirror';
+import { pixelateImageFromBuffer } from '../processing/pixelate';
+import {
+	resampleImageFromBuffer,
+	ResamplingMode
+} from '../processing/resample';
 import {
 	rotate180DegreesFromImage,
 	rotate90DegreesClockwiseFromImage,
 	rotate90DegreesCounterclockwiseFromImage
-} from '../rotate';
+} from '../processing/rotate';
 
 export const defaultJpegQuality = 90;
 

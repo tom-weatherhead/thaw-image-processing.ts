@@ -2,7 +2,7 @@
 
 /* eslint-disable no-fallthrough */
 
-import { createThAWImage, IThAWImage } from './thawimage';
+import { createThAWImage, IThAWImage } from '../util/image';
 
 export function pixelateImageFromBuffer(
 	srcImage: IThAWImage,

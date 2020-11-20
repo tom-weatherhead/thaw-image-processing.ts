@@ -1,13 +1,13 @@
 // thaw-image-processing.ts/src/mirror.ts
 
-// import { IOperationOptions } from './file-types/jpeg';
+// import { IOperationOptio../util/imagens } from './file-types/jpeg';
 
 import {
 	createAffineTransformationMatrix,
 	doAffineTransformation
 } from './affine';
 
-import { createThAWImage, IThAWImage } from './thawimage';
+import { createThAWImage, IThAWImage } from '../util/image';
 
 export function mirrorImage(srcImage: IThAWImage): IThAWImage {
 	const dstImage = createThAWImage(

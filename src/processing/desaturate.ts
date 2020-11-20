@@ -1,8 +1,8 @@
 // thaw-image-processing.ts/src/desaturate.ts
 
-import { ColourModel, IThAWImage, ThAWImageBufferType } from './thawimage';
+import { ColourModel, IThAWImage, ThAWImageBufferType } from '../util/image';
 
-import { mapColoursInImageFromBuffer } from './map-colours';
+import { mapColoursInImageFromBuffer } from '../util/map-colours';
 
 export function desaturateRGBA(
 	buffer: ThAWImageBufferType,

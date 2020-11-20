@@ -1,7 +1,7 @@
 // thaw-image-processing.ts/src/rotate.ts
 
-import { mapImageByCoordinatesFromBuffer } from './map-coordinates';
-import { createThAWImage, IThAWImage } from './thawimage';
+import { mapImageByCoordinatesFromBuffer } from '../util/map-coordinates';
+import { createThAWImage, IThAWImage } from '../util/image';
 
 export function rotate90DegreesClockwiseFromImage(
 	srcImage: IThAWImage
