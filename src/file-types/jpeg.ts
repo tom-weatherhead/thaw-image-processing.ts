@@ -9,6 +9,7 @@ import { isNonNegativeInteger } from 'thaw-common-utilities.ts';
 import { createThAWImage, IThAWImage } from '../thawimage';
 
 import { compositeTest } from '../composite';
+import { desaturateImage } from '../desaturate';
 import { flipImage } from '../flip';
 import { gaussianBlurImage } from '../gaussian-blur';
 import {
@@ -30,11 +31,7 @@ export const defaultJpegQuality = 90;
 
 // 1a) Types
 
-// interface IFileOptions {
-// 	quality?: number;
-// }
-
-interface IFileManager {
+export interface IFileManager {
 	load(path: string): IThAWImage;
 	save(image: IThAWImage, path: string): void;
 }
@@ -88,19 +85,10 @@ function saveJpegFile(
 	fsInjected: typeof fs,
 	image: IThAWImage,
 	path: string,
-	// options?: IFileOptions
 	options: {
 		quality: number;
 	}
 ): void {
-	// let quality = defaultJpegQuality;
-
-	// if (
-	// 	typeof options !== 'undefined' &&
-	// 	typeof options.quality !== 'undefined'
-	// ) {
-	// 	quality = options.quality;
-	// }
 	const dstJpegData = encode(image, options.quality);
 
 	fsInjected.writeFileSync(path, dstJpegData.data);
@@ -135,6 +123,17 @@ export function compositeTestFromJpegFile(
 ): void {
 	const srcImage = fileManager.load(srcFilePath);
 	const dstImage = compositeTest(srcImage);
+
+	fileManager.save(dstImage, dstFilePath);
+}
+
+export function desaturateImageFromJpegFile(
+	fileManager: IFileManager,
+	srcFilePath: string,
+	dstFilePath: string
+): void {
+	const srcImage = fileManager.load(srcFilePath);
+	const dstImage = desaturateImage(srcImage);
 
 	fileManager.save(dstImage, dstFilePath);
 }

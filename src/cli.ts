@@ -12,9 +12,12 @@ import * as engine from '..';
 // // -sc = Bicubic
 
 const jpegFileManager = engine.createJpegFileManager(fs);
+const pngFileManager = engine.createPngFileManager(fs);
 
 // //const defaultSrcFilePath = 'test/input-files/unconventional-table.jpg';
 const defaultSrcFilePath = 'test/input-files/fast-and-fourier.jpg';
+const defaultPngSrcFilePath =
+	'test/input-files/Vermeer-Girl_with_Pearl_Earring1665_716x1024.png';
 
 // // The option -q (JPEG export quality) is common to all operations; its value must be an integer in the range [0, 100].
 
@@ -50,6 +53,8 @@ const defaultSrcFilePath = 'test/input-files/fast-and-fourier.jpg';
 // 	'r180': {}
 // };
 // */
+
+// **** JPEG ****
 
 function dispatchCompositeTest(argv: string[]): void {
 	let srcFilePath = defaultSrcFilePath;
@@ -391,10 +396,47 @@ function dispatchRotate180Degrees(argv: string[]): void {
 	);
 }
 
+// **** PNG ****
+
+function dispatchRotate90DegreesClockwisePng(argv: string[]): void {
+	let srcFilePath = defaultPngSrcFilePath;
+	let dstFilePath = 'test/output-files/rotate90cw.png';
+
+	for (let i = 0; i < argv.length; i++) {
+		const arg = argv[i];
+
+		if (arg.substr(0, 1) !== '-') {
+			if (!srcFilePath) {
+				srcFilePath = arg;
+			} else if (!dstFilePath) {
+				dstFilePath = arg;
+			}
+		} else if (i < argv.length - 1) {
+			const nextArg = argv[i + 1];
+			i++;
+
+			// if (arg === '-q') {
+			// 	const dstQuality = parseInt(nextArg, 10);
+
+			// 	jpegFileManager.setDstImageQuality(dstQuality);
+			// }
+		}
+	}
+
+	console.log('Rotate 90 degrees clockwise.');
+	engine.rotate90DegreesClockwiseFromPngFile(
+		pngFileManager,
+		srcFilePath,
+		dstFilePath
+	);
+}
+
 function dispatch(argv: string[]): void {
 	const command = argv.shift();
 
 	switch (command) {
+		// **** JPEG ****
+
 		case 'c':
 			dispatchCompositeTest(argv);
 			break;
@@ -433,6 +475,12 @@ function dispatch(argv: string[]): void {
 
 		case 'r180':
 			dispatchRotate180Degrees(argv);
+			break;
+
+		// **** PNG ****
+
+		case 'r90cw_p':
+			dispatchRotate90DegreesClockwisePng(argv);
 			break;
 
 		default:

@@ -107,3 +107,4 @@ dist
 lib/
 cli/cli*
 test/output-files/*.jpg
+test/output-files/*.png

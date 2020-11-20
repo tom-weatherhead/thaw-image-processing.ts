@@ -13,5 +13,8 @@
 	},
 	"files": [
 		"src/main.ts"
+	],
+	"exclude": [
+		"src/cli.ts"
 	]
 }

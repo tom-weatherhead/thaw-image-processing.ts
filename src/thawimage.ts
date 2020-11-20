@@ -237,3 +237,16 @@ export function createThAWImage(
 // 		options
 // 	);
 // }
+
+export function createThAWImageFromImageData(
+	imageData: ImageData
+): IThAWImage {
+	return new ThAWImage(
+		imageData.width,
+		imageData.height,
+		undefined,
+		undefined,
+		// colourModel,
+		imageData.data
+	);
+}

@@ -7,6 +7,7 @@ export * from './thawimage';
 export * from './affine';
 export * from './composite';
 export * from './convolve';
+export * from './desaturate';
 export * from './flip';
 export * from './gaussian-blur';
 export * from './map-colours';
@@ -18,3 +19,4 @@ export * from './resample';
 export * from './rotate';
 
 export * from './file-types/jpeg';
+export * from './file-types/png';
