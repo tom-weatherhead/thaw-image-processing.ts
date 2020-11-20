@@ -12,7 +12,7 @@ export interface IFileIOManager {
 	save(image: IThAWImage, path: string): Promise<void>;
 }
 
-function getExtensionFromFilePath(path: string): string {
+export function getExtensionFromFilePath(path: string): string {
 	const i = path.toLowerCase().lastIndexOf('.');
 
 	if (i < 0) {

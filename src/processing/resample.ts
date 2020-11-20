@@ -345,7 +345,7 @@ function get1DResamplingFunction(
 	}
 }
 
-export function resampleImageFromBuffer(
+export function resampleImage(
 	srcImage: IThAWImage,
 	dstWidth: number,
 	dstHeight: number,

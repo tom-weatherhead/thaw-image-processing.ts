@@ -1,6 +1,6 @@
 // thaw-image-processing.ts/test/pixelate.test.ts
 
-import { createThAWImage, pixelateImageFromBuffer } from '..';
+import { createThAWImage, pixelateImage } from '..';
 
 test('pixelateImage', () => {
 	// Arrange
@@ -10,7 +10,7 @@ test('pixelateImage', () => {
 	const pixelWidth = 8;
 
 	// Act
-	const dstImage = pixelateImageFromBuffer(srcImage, pixelWidth);
+	const dstImage = pixelateImage(srcImage, pixelWidth);
 
 	// Assert
 	expect(dstImage).toBeTruthy();

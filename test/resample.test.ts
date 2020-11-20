@@ -1,6 +1,6 @@
 // thaw-image-processing.ts/test/resample.test.ts
 
-import { createThAWImage, resampleImageFromBuffer, ResamplingMode } from '..';
+import { createThAWImage, resampleImage, ResamplingMode } from '..';
 
 test('resampleImage', () => {
 	// Arrange
@@ -11,7 +11,7 @@ test('resampleImage', () => {
 	const dstHeight = 768;
 
 	// Act
-	const dstImage = resampleImageFromBuffer(
+	const dstImage = resampleImage(
 		srcImage,
 		dstWidth,
 		dstHeight,

@@ -4,7 +4,7 @@
 
 import { createThAWImage, IThAWImage } from '../util/image';
 
-export function pixelateImageFromBuffer(
+export function pixelateImage(
 	srcImage: IThAWImage,
 	pixelWidth: number,
 	pixelHeight?: number
