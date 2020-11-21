@@ -18,6 +18,3 @@ export * from './util/file-io';
 export * from './util/map-colours';
 // export * from './util/map-coordinates';
 // export * from './util/remap-and-divide-by-255';
-
-// export * from './file-types/jpeg';
-// export * from './file-types/png';

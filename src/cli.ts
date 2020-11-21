@@ -11,9 +11,6 @@ import * as engine from '..';
 // // -sl = Bilinear
 // // -sc = Bicubic
 
-// const jpegFileManager = engine.createJpegFileManager(fs);
-// const pngFileManager = engine.createPngFileManager(fs);
-
 const fileManager = engine.createFileIOManager(fs);
 
 // //const defaultSrcFilePath = 'test/input-files/unconventional-table.jpg';
@@ -62,7 +59,6 @@ const dstFileExtension = engine.getExtensionFromFilePath(defaultSrcFilePath);
 
 async function dispatchCompositeTest(argv: string[]): Promise<void> {
 	let srcFilePath = defaultSrcFilePath;
-	// let dstFilePath = 'test/output-files/composite-test.jpg';
 	let dstFilePath = `test/output-files/composite-test.${dstFileExtension}`;
 
 	if (!fs.existsSync(srcFilePath)) {
@@ -84,11 +80,6 @@ async function dispatchCompositeTest(argv: string[]): Promise<void> {
 	}
 
 	console.log('Composite.');
-	// engine.compositeTestFromJpegFile(
-	// 	jpegFileManager,
-	// 	srcFilePath,
-	// 	dstFilePath
-	// );
 
 	const srcImage = await fileManager.load(srcFilePath);
 	const dstImage = engine.compositeTest(srcImage);
@@ -98,7 +89,6 @@ async function dispatchCompositeTest(argv: string[]): Promise<void> {
 
 async function dispatchDesaturate(argv: string[]): Promise<void> {
 	let srcFilePath = defaultSrcFilePath;
-	// let dstFilePath = 'test/output-files/desaturate.jpg';
 	let dstFilePath = `test/output-files/desaturate.${dstFileExtension}`;
 
 	for (let i = 0; i < argv.length; i++) {
@@ -114,12 +104,6 @@ async function dispatchDesaturate(argv: string[]): Promise<void> {
 	}
 
 	console.log('Desaturate.');
-	// engine.mapColoursInImageFromJpegFile(
-	// 	jpegFileManager,
-	// 	srcFilePath,
-	// 	dstFilePath,
-	// 	engine.desaturateRGBA
-	// );
 
 	const srcImage = await fileManager.load(srcFilePath);
 	const dstImage = engine.desaturateImage(srcImage);
@@ -129,7 +113,6 @@ async function dispatchDesaturate(argv: string[]): Promise<void> {
 
 async function dispatchFlip(argv: string[]): Promise<void> {
 	const srcFilePath = defaultSrcFilePath;
-	// const dstFilePath = 'test/output-files/flip.jpg';
 	const dstFilePath = `test/output-files/flip.${dstFileExtension}`;
 
 	// for (let i = 0; i < argv.length; i++) {
@@ -145,7 +128,6 @@ async function dispatchFlip(argv: string[]): Promise<void> {
 	// }
 
 	console.log('Flip:', argv);
-	// engine.flipImageFromJpegFile(jpegFileManager, srcFilePath, dstFilePath);
 
 	const srcImage = await fileManager.load(srcFilePath);
 	const dstImage = engine.flipImage(srcImage);
@@ -155,7 +137,6 @@ async function dispatchFlip(argv: string[]): Promise<void> {
 
 async function dispatchGaussianBlur(argv: string[]): Promise<void> {
 	let srcFilePath = defaultSrcFilePath;
-	// let dstFilePath = 'test/output-files/gaussian-blur.jpg';
 	let dstFilePath = `test/output-files/gaussian-blur.${dstFileExtension}`;
 	// let sigma = 1.0;
 	let sigma = 4.0;
@@ -189,13 +170,6 @@ async function dispatchGaussianBlur(argv: string[]): Promise<void> {
 	}
 
 	console.log('Gaussian blur.');
-	// engine.gaussianBlurImageFromJpegFile(
-	// 	jpegFileManager,
-	// 	srcFilePath,
-	// 	dstFilePath,
-	// 	sigma,
-	// 	kernelSize
-	// );
 
 	const srcImage = await fileManager.load(srcFilePath);
 	const dstImage = engine.gaussianBlurImage(srcImage, sigma, kernelSize);
@@ -205,7 +179,6 @@ async function dispatchGaussianBlur(argv: string[]): Promise<void> {
 
 async function dispatchMirror(argv: string[]): Promise<void> {
 	const srcFilePath = defaultSrcFilePath;
-	// const dstFilePath = 'test/output-files/mirror.jpg';
 	const dstFilePath = `test/output-files/mirror.${dstFileExtension}`;
 
 	// for (let i = 0; i < argv.length; i++) {
@@ -221,7 +194,6 @@ async function dispatchMirror(argv: string[]): Promise<void> {
 	// }
 
 	console.log('Mirror:', argv);
-	// engine.mirrorImageFromJpegFile(jpegFileManager, srcFilePath, dstFilePath);
 
 	const srcImage = await fileManager.load(srcFilePath);
 	const dstImage = engine.mirrorImage(srcImage);
@@ -231,7 +203,6 @@ async function dispatchMirror(argv: string[]): Promise<void> {
 
 async function dispatchPixelate(argv: string[]): Promise<void> {
 	let srcFilePath = defaultSrcFilePath;
-	// let dstFilePath = 'test/output-files/pixelate.jpg';
 	let dstFilePath = `test/output-files/pixelate.${dstFileExtension}`;
 	let pixelWidth = 8;
 	let pixelHeight = 8;
@@ -263,13 +234,6 @@ async function dispatchPixelate(argv: string[]): Promise<void> {
 	}
 
 	console.log('Pixelate.');
-	// engine.pixelateImageFromJpegFile(
-	// 	jpegFileManager,
-	// 	srcFilePath,
-	// 	dstFilePath,
-	// 	pixelWidth,
-	// 	pixelHeight
-	// );
 
 	const srcImage = await fileManager.load(srcFilePath);
 	const dstImage = engine.pixelateImage(srcImage, pixelWidth, pixelHeight);
@@ -279,7 +243,6 @@ async function dispatchPixelate(argv: string[]): Promise<void> {
 
 async function dispatchResample(argv: string[]): Promise<void> {
 	let srcFilePath = defaultSrcFilePath;
-	// let dstFilePath = 'test/output-files/resample.jpg';
 	let dstFilePath = `test/output-files/resample.${dstFileExtension}`;
 	let dstWidth = 0;
 	let dstHeight = 0;
@@ -328,14 +291,6 @@ async function dispatchResample(argv: string[]): Promise<void> {
 	}
 
 	console.log('Resample.');
-	// engine.resampleImageFromJpegFile(
-	// 	jpegFileManager,
-	// 	srcFilePath,
-	// 	dstFilePath,
-	// 	dstWidth,
-	// 	dstHeight,
-	// 	mode
-	// );
 
 	const srcImage = await fileManager.load(srcFilePath);
 	const dstImage = engine.resampleImage(
@@ -348,12 +303,10 @@ async function dispatchResample(argv: string[]): Promise<void> {
 	await fileManager.save(dstImage, dstFilePath);
 }
 
-// function dispatchRotate90DegreesClockwise(argv: string[]): void {
 async function dispatchRotate90DegreesClockwise(
 	argv: string[]
 ): Promise<void> {
 	let srcFilePath = defaultSrcFilePath;
-	// let dstFilePath = 'test/output-files/rotate90cw.jpg';
 	let dstFilePath = `test/output-files/rotate90cw.${dstFileExtension}`;
 
 	for (let i = 0; i < argv.length; i++) {
@@ -389,7 +342,6 @@ async function dispatchRotate90DegreesCounterclockwise(
 	argv: string[]
 ): Promise<void> {
 	let srcFilePath = defaultSrcFilePath;
-	// let dstFilePath = 'test/output-files/rotate90ccw.jpg';
 	let dstFilePath = `test/output-files/rotate90ccw.${dstFileExtension}`;
 
 	for (let i = 0; i < argv.length; i++) {
@@ -414,11 +366,6 @@ async function dispatchRotate90DegreesCounterclockwise(
 	}
 
 	console.log('Rotate 90 degrees counter-clockwise.');
-	// engine.rotate90DegreesCounterclockwiseFromJpegFile(
-	// 	jpegFileManager,
-	// 	srcFilePath,
-	// 	dstFilePath
-	// );
 
 	const srcImage = await fileManager.load(srcFilePath);
 	const dstImage = engine.rotate90DegreesCounterclockwiseFromImage(
@@ -430,7 +377,6 @@ async function dispatchRotate90DegreesCounterclockwise(
 
 async function dispatchRotate180Degrees(argv: string[]): Promise<void> {
 	let srcFilePath = defaultSrcFilePath;
-	// let dstFilePath = 'test/output-files/rotate180.jpg';
 	let dstFilePath = `test/output-files/rotate180.${dstFileExtension}`;
 
 	for (let i = 0; i < argv.length; i++) {

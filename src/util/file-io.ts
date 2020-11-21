@@ -1,6 +1,6 @@
 // // thaw-image-processing.ts/src/util/file-io.ts
 
-import * as fs from 'fs'; // Used only as a type, so Angular is OK.
+import * as fs from 'fs'; // Used only as a type, so Angular will be OK.
 
 import * as jpg from 'jpeg-js';
 import * as png from '@vivaxy/png';
@@ -69,7 +69,6 @@ async function saveFile(
 ): Promise<void> {
 	const defaultJpegQuality = 90;
 	const extension = getExtensionFromFilePath(path);
-	// const srcData = await fsInjected.promises.readFile(path);
 	let dstData;
 
 	switch (extension) {
@@ -95,7 +94,7 @@ async function saveFile(
 
 		default:
 			throw new Error(
-				`loadFile() : Unsupported extension in path '${path}'`
+				`saveFile() : Unsupported extension in path '${path}'`
 			);
 	}
 

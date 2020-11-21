@@ -49,7 +49,11 @@ export interface IThAWImage extends ImageData {
 	// readonly data: ThAWImageBufferType;
 	readonly bytesPerPixel: number;
 	readonly bytesPerLine: number;
+	// bitsPerChannel?
+	// numChannels?
 	readonly colourModel: ColourModel;
+	// palette?
+	// softMask?
 
 	getPixelAsArray(row: number, column: number): number[];
 	// copy(dstRow: number, dstColumn: number, width: number, height: number, srcImage: IThAWImage, srcRow: number, srcColumn: number): IThAWImage;
