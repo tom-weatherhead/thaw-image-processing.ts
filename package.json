@@ -1,6 +1,6 @@
 {
 	"name": "thaw-image-processing.ts",
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"description": "Raster image processing functions written in TypeScript",
 	"keywords": [
 		"affine transformation",
@@ -48,18 +48,23 @@
 	"scripts": {
 		"all": "npm run rebuild-online && npm pack && npm run deploy",
 		"rebuild-offline": "npm run clean-offline && npm run build-and-test",
-		"clean-offline": "rm -rf coverage",
+		"clean-offline": "rm -rf cli && rm -rf coverage && rm -rf lib",
 		"rebuild-online": "npm run clean-online && npm i && npm run build-and-test",
 		"clean-online": "npm run clean-offline && rm -rf node_modules && rm -f package-lock.json",
 		"build-and-test": "npm run prettier-check && npm run lint && npm run build && npm test",
-		"prettier-check": "prettier --check \"./*.js\" \"src/**/*.ts\" \"test/**/*.ts\"",
-		"prettier-check-windows": "prettier --check \"src/*.ts\"",
+		"// prettier-check": "prettier --check \"./*.js\" \"src/**/*.ts\" \"test/**/*.ts\"",
+		"prettier-check": "prettier --check \"src/**/*.ts\" \"test/**/*.ts\"",
+		"// prettier-check-windows": "prettier --check \"src/*.ts\"",
 		"prettier-list": "prettier --list-different \"./*.js\" \"src/**/*.ts\" \"test/**/*.ts\"",
-		"prettier-format": "prettier --write \"./*.js\" \"src/**/*.ts\" \"test/**/*.ts\"",
+		"// prettier-format": "prettier --write \"./*.js\" \"src/**/*.ts\" \"test/**/*.ts\"",
+		"prettier-format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
 		"lint": "eslint . --ext .js --ext .ts",
-		"build": "rm -rf lib; tsc",
-		"build-cli": "rm -f lib/cli.js; tsc -p tsconfig.cli.json",
-		"test": "rm -rf coverage; jest --detectOpenHandles --forceExit",
+		"// build": "rm -rf lib; tsc",
+		"build": "tsc",
+		"// build-cli": "rm -rf cli; tsc -p tsconfig.cli.json",
+		"build-cli": "tsc -p tsconfig.cli.json",
+		"// test": "rm -rf coverage; jest --detectOpenHandles --forceExit",
+		"test": "jest --detectOpenHandles --forceExit",
 		"deploy": "eval mv $npm_package_name-$npm_package_version.tgz $(echo $npm_package_config_deploy_target_dir)/",
 		"prepare": "npm run build",
 		"prepublishOnly": "npm test && npm run lint",
@@ -80,7 +85,7 @@
 	"dependencies": {
 		"@vivaxy/png": "^1.3.0",
 		"jpeg-js": "^0.4.2",
-		"thaw-common-utilities.ts": "^0.0.3"
+		"thaw-common-utilities.ts": "^0.0.4"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.12.7",
