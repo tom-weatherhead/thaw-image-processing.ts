@@ -26,3 +26,27 @@ export function desaturateImage(srcImage: IThAWImage): IThAWImage {
 	}
 	return mapColoursInImageFromBuffer(srcImage, desaturateRGBA);
 }
+
+export function rotateColourChannelsRGBA(
+	buffer: ThAWImageBufferType,
+	offset: number
+): void {
+	const temp = buffer[offset];
+
+	buffer[offset] = buffer[offset + 1];
+	buffer[offset + 1] = buffer[offset + 2];
+	buffer[offset + 2] = temp;
+
+	// buffer[offset + 3] is the alpha channel; do not change it.
+}
+
+export function rotateColourChannelsInImage(
+	srcImage: IThAWImage
+): IThAWImage {
+	if (srcImage.colourModel !== ColourModel.RGBA32) {
+		throw new Error(
+			'rotateColourChannelsInImage: Unsupported colour model'
+		);
+	}
+	return mapColoursInImageFromBuffer(srcImage, rotateColourChannelsRGBA);
+}
