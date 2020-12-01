@@ -34,7 +34,9 @@
 	"files": [
 		"lib/**/*"
 	],
-	"bin": {},
+	"bin": {
+		"thimproc": "./loader.js"
+	},
 	"man": [],
 	"directories": {
 		"lib": "lib",
@@ -46,36 +48,33 @@
 		"test": "test"
 	},
 	"scripts": {
-		"all": "npm run rebuild-online && npm pack && npm run deploy",
-		"rebuild-offline": "npm run clean-offline && npm run build-and-test",
-		"clean-offline": "rm -rf cli && rm -rf coverage && rm -rf lib",
-		"rebuild-online": "npm run clean-online && npm i && npm run build-and-test",
-		"clean-online": "npm run clean-offline && rm -rf node_modules && rm -f package-lock.json",
+		"all": "npm run rebuild && npm pack && npm run deploy",
+		"clean-build-products": "rm -rf cli && rm -rf coverage && rm -rf lib",
+		"clean-packages": "rm -rf node_modules && rm -f package-lock.json",
+		"clean": "npm run clean-build-products && npm run clean-packages",
+		"rebuild": "npm run clean && npm i && npm run build-and-test",
+		"// rebuild-offline": "npm run clean-offline && npm run build-and-test",
 		"build-and-test": "npm run prettier-check && npm run lint && npm run build && npm test",
 		"// prettier-check": "prettier --check \"./*.js\" \"src/**/*.ts\" \"test/**/*.ts\"",
-		"prettier-check": "prettier --check \"src/**/*.ts\" \"test/**/*.ts\"",
-		"// prettier-check-windows": "prettier --check \"src/*.ts\"",
-		"prettier-list": "prettier --list-different \"./*.js\" \"src/**/*.ts\" \"test/**/*.ts\"",
+		"prettier-check": "prettier --check \"./src/**/*.ts\" \"./test/**/*.ts\"",
+		"// prettier-list": "prettier --list-different \"./*.js\" \"src/**/*.ts\" \"test/**/*.ts\"",
+		"prettier-list": "prettier --list-different \"src/**/*.ts\" \"test/**/*.ts\"",
 		"// prettier-format": "prettier --write \"./*.js\" \"src/**/*.ts\" \"test/**/*.ts\"",
 		"prettier-format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
 		"lint": "eslint . --ext .js --ext .ts",
-		"// build": "rm -rf lib; tsc",
 		"build": "tsc",
-		"// build-cli": "rm -rf cli; tsc -p tsconfig.cli.json",
 		"build-cli": "tsc -p tsconfig.cli.json",
-		"// test": "rm -rf coverage; jest --detectOpenHandles --forceExit",
 		"test": "jest --detectOpenHandles --forceExit",
 		"deploy": "eval mv $npm_package_name-$npm_package_version.tgz $(echo $npm_package_config_deploy_target_dir)/",
-		"prepare": "npm run build",
+		"// prepare": "npm run build",
 		"prepublishOnly": "npm test && npm run lint",
 		"preversion": "npm run lint",
 		"version": "npm run format && git add -A src",
 		"postversion": "git push && git push --tags",
-		"re": "npm run prettier-format && npm run clean-offline && npm run build-and-test && npm pack && npm run deploy",
 		"loc": "git ls-files | grep -v package-lock.json | tr -d '\\r' | tr '\\n' '\\0' | xargs -0 wc -l",
+		"re": "npm run prettier-format && npm run clean-build-products && npm run build-and-test && npm pack && npm run deploy",
 		"f": "npm run prettier-format && npm run all",
 		"start": "npm run all",
-		"x": "node lib/cli.js f && node lib/cli.js m",
 		"cli": "./loader.js"
 	},
 	"config": {
