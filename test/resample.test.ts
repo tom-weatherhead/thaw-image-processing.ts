@@ -7,8 +7,8 @@ test('resampleImage', () => {
 	const srcWidth = 320;
 	const srcHeight = 200;
 	const srcImage = createThAWImage(srcWidth, srcHeight);
-	const dstWidth = 1024;
-	const dstHeight = 768;
+	const dstWidth = 250;
+	const dstHeight = 343;
 
 	// Act
 	const dstImage = resampleImage(
