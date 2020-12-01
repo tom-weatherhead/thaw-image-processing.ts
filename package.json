@@ -56,7 +56,7 @@
 		"// rebuild-offline": "npm run clean-offline && npm run build-and-test",
 		"build-and-test": "npm run prettier-check && npm run lint && npm run build && npm test",
 		"// prettier-check": "prettier --check \"./*.js\" \"src/**/*.ts\" \"test/**/*.ts\"",
-		"prettier-check": "prettier --check \"./src/**/*.ts\" \"./test/**/*.ts\"",
+		"prettier-check": "prettier --check \"./src/processing/resample.ts\"",
 		"// prettier-list": "prettier --list-different \"./*.js\" \"src/**/*.ts\" \"test/**/*.ts\"",
 		"prettier-list": "prettier --list-different \"src/**/*.ts\" \"test/**/*.ts\"",
 		"// prettier-format": "prettier --write \"./*.js\" \"src/**/*.ts\" \"test/**/*.ts\"",
